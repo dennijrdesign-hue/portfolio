@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dennis Joel Raj — Product Designer for complex enterprise systems</title>
+<meta name="description" content="Dennis Joel Raj D, Team Lead – UI/UX Designer. I design HRMS, ERP and Manufacturing ERP products where hundreds of rules need to feel effortless.">
+<meta property="og:title" content="Dennis Joel Raj — Deciding who sees what">
+<meta property="og:description" content="Product designer for workflow-heavy enterprise software. HRMS, ERP, Manufacturing ERP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+<style>
+/* ───────────────────────────── tokens ───────────────────────────── */
+:root{
+  --ink:#0E1218; --ink-2:#161B23; --ink-3:#222933;
+  --paper:#EEF0EE; --paper-2:#E3E6E3; --paper-3:#D5D9D6;
+  --blue:#2F45FF; --blue-soft:#8E9BFF;
+  --hrms:#1FB6A6; --erp:#F2A93B; --clarks:#8C2B34; --chrm:#3E7C4F;
+  --accent:var(--blue);
+  --font:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-io:cubic-bezier(.65,0,.35,1);
+  --gutter:clamp(20px,4vw,72px);
+  --rail:56px;
+  --dur:.6s;
+}
+html[data-theme="dark"]{ --bg:var(--ink); --bg-2:var(--ink-2); --bg-3:var(--ink-3); --fg:#F3F4F2; --fg-2:#A9AFB8; --fg-3:#5F6772; --line:rgba(243,244,242,.12); --line-2:rgba(243,244,242,.06); }
+html[data-theme="light"]{ --bg:var(--paper); --bg-2:var(--paper-2); --bg-3:var(--paper-3); --fg:#0E1218; --fg-2:#4A5059; --fg-3:#8A9099; --line:rgba(14,18,24,.14); --line-2:rgba(14,18,24,.07); }
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0; font-family:var(--font); font-feature-settings:"cv11","ss01","ss03","tnum"; font-optical-sizing:auto;
+  background:var(--bg); color:var(--fg); line-height:1.5; -webkit-font-smoothing:antialiased;
+  transition:background-color .9s var(--ease-io), color .9s var(--ease-io);
+  overflow-x:hidden;
+}
+body.no-cursor, body.no-cursor a, body.no-cursor button{cursor:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+img,svg{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ───────────────────────── atmosphere ───────────────────────── */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.gridlayer{position:fixed;inset:0;pointer-events:none;z-index:59;opacity:0;transition:opacity .4s;
+  background-image:linear-gradient(var(--accent) 1px,transparent 1px),linear-gradient(90deg,var(--accent) 1px,transparent 1px);
+  background-size:8px 8px; }
+.gridlayer::after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--accent) 1px,transparent 1px),linear-gradient(90deg,var(--accent) 1px,transparent 1px);background-size:96px 96px;opacity:.6}
+html.show-grid .gridlayer{opacity:.13}
+html.inspect .inspect-tag{opacity:1;transform:none}
+.h-l,.h-xl,.project__title,.think__stmt,.contact__stmt,.lede{position:relative}
+.inspect-tag{position:absolute;font-size:10px;letter-spacing:.02em;color:var(--accent);background:var(--bg);border:1px solid var(--accent);padding:2px 6px;border-radius:2px;opacity:0;transform:translateY(4px);transition:.3s;pointer-events:none;z-index:5;white-space:nowrap}
+
+/* ─────────────────────────── cursor ─────────────────────────── */
+.cursor{position:fixed;left:0;top:0;z-index:100;pointer-events:none;mix-blend-mode:difference;display:none}
+body.no-cursor .cursor{display:block}
+.cursor__dot{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff}
+.cursor__ring{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.9);
+  display:flex;align-items:center;justify-content:center;transition:width .35s var(--ease),height .35s var(--ease),left .35s var(--ease),top .35s var(--ease),background .35s,border-color .35s}
+.cursor__label{font-size:11px;font-weight:600;letter-spacing:.04em;color:#000;opacity:0;transition:opacity .2s;white-space:nowrap}
+.cursor.is-link .cursor__ring{width:56px;height:56px;left:-28px;top:-28px}
+.cursor.is-label .cursor__ring{width:88px;height:88px;left:-44px;top:-44px;background:#fff;border-color:#fff}
+.cursor.is-label .cursor__label{opacity:1}
+.cursor.is-label .cursor__dot{opacity:0}
+.cursor.is-hidden{opacity:0}
+
+/* ─────────────────────────── loader ─────────────────────────── */
+.loader{position:fixed;inset:0;z-index:200;background:var(--ink);color:#F3F4F2;display:flex;align-items:flex-end;padding:var(--gutter);font-size:13px}
+.loader__list{display:grid;gap:6px;width:min(320px,80vw)}
+.loader__row{display:flex;justify-content:space-between;opacity:.25;transition:opacity .3s}
+.loader__row.on{opacity:1}
+.loader__row span:last-child{color:var(--blue-soft);opacity:0;transition:opacity .3s}
+.loader__row.on span:last-child{opacity:1}
+.loader__bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--blue);transform-origin:left;transform:scaleX(0)}
+.loader__title{position:absolute;top:var(--gutter);left:var(--gutter);font-size:13px;color:#A9AFB8}
+.loader__title b{color:#F3F4F2;font-weight:500}
+html.loaded .loader{display:none}
+
+/* ───────────────────── rail + nav + progress ───────────────────── */
+.rail{position:fixed;left:0;top:0;bottom:0;width:var(--rail);z-index:50;border-right:1px solid var(--line-2);display:flex;flex-direction:column;justify-content:space-between;padding:22px 0;pointer-events:none}
+.rail__chapter{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;letter-spacing:.06em;color:var(--fg-3);margin:0 auto;white-space:nowrap}
+.rail__chapter b{color:var(--fg);font-weight:500}
+.rail__coords{writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;color:var(--fg-3);margin:0 auto;font-variant-numeric:tabular-nums}
+.rail__ticks{position:absolute;left:0;top:0;bottom:0;width:100%;background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% 96px;opacity:.6}
+.rail__ticks::after{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% 24px}
+.progress{position:fixed;left:calc(var(--rail) - 1px);top:0;bottom:0;width:2px;z-index:51;pointer-events:none}
+.progress__fill{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--accent);transform-origin:top;transform:scaleY(0)}
+
+.nav{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:2px;padding:5px;border-radius:999px;
+  background:color-mix(in srgb,var(--bg) 80%,transparent);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:transform .6s var(--ease),opacity .4s,background .6s}
+.nav a{position:relative;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:500;color:var(--fg-2);transition:color .3s,padding .5s var(--ease),transform .3s}
+.nav a.active{color:var(--fg)}
+.nav__pill{position:absolute;top:5px;left:0;height:calc(100% - 10px);border-radius:999px;background:var(--bg-3);z-index:-1;transition:left .5s var(--ease),width .5s var(--ease)}
+.nav__pos{padding:0 12px 0 10px;font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums;border-left:1px solid var(--line);margin-left:4px}
+.nav.compact a{padding:8px 11px;font-size:12px}
+.nav.compact .nav__pos{display:none}
+.nav.hide{transform:translate(-50%,120%);opacity:0}
+
+/* ─────────────────────── shared layout ─────────────────────── */
+.section{position:relative;padding-left:calc(var(--rail) + var(--gutter));padding-right:var(--gutter)}
+.wrap{max-width:1360px;margin:0 auto}
+.h-xl{font-size:clamp(44px,8.4vw,150px);font-weight:300;line-height:.94;letter-spacing:-.045em;margin:0}
+.h-l{font-size:clamp(32px,5vw,84px);font-weight:300;line-height:1;letter-spacing:-.04em;margin:0}
+.h-m{font-size:clamp(24px,2.8vw,44px);font-weight:400;line-height:1.1;letter-spacing:-.03em;margin:0}
+.lede{font-size:clamp(17px,1.35vw,21px);line-height:1.5;color:var(--fg-2);max-width:56ch;margin:0}
+.small{font-size:13px;color:var(--fg-3)}
+.mark{color:var(--accent)}
+.meta{font-size:12px;color:var(--fg-3);display:flex;gap:18px;flex-wrap:wrap}
+.meta b{color:var(--fg-2);font-weight:500}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+.chapter-num{font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.link{position:relative;display:inline-block}
+.link::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;transform:scaleX(1);transform-origin:right;transition:transform .5s var(--ease)}
+.link:hover::after{transform:scaleX(0);transform-origin:right;animation:underline .6s var(--ease) forwards}
+@keyframes underline{0%{transform:scaleX(0);transform-origin:left}100%{transform:scaleX(1);transform-origin:left}}
+.btn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:500;transition:background .3s,border-color .3s,color .3s;white-space:nowrap}
+.btn:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn--solid{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn--solid:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn svg{width:16px;height:16px}
+.split{display:grid;grid-template-columns:5fr 7fr;gap:clamp(24px,5vw,96px);align-items:start}
+.reveal-lines .l{display:block;overflow:hidden}
+.reveal-lines .l>span{display:block;transform:translateY(110%);transition:transform 1s var(--ease)}
+.reveal-lines.in .l>span{transform:none}
+.reveal-lines.in .l:nth-child(2)>span{transition-delay:.08s}
+.reveal-lines.in .l:nth-child(3)>span{transition-delay:.16s}
+.reveal-lines.in .l:nth-child(4)>span{transition-delay:.24s}
+.fade{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.fade.in{opacity:1;transform:none}
+
+/* ──────────────────────── 00 · intro/hero ──────────────────────── */
+.hero{min-height:100vh;min-height:100svh;display:grid;grid-template-rows:1fr auto;overflow:hidden}
+.hero__stage{position:absolute;inset:0;pointer-events:none}
+.hero__radial{position:absolute;left:60%;top:40%;width:70vmax;height:70vmax;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(47,69,255,.16),transparent 70%);filter:blur(10px)}
+.hero__coords{position:absolute;right:var(--gutter);top:22px;font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums;display:flex;gap:16px}
+.hero__coords span:first-child{color:var(--fg-2)}
+.hero__body{position:relative;z-index:2;display:grid;align-content:center;padding-top:14vh;padding-bottom:6vh;min-height:80vh}
+.hero__typed{font-size:clamp(34px,6.4vw,112px);font-weight:300;letter-spacing:-.045em;line-height:1;min-height:1.1em;margin:0}
+.hero__typed .w{display:inline-block;color:var(--fg)}
+.hero__typed .caret{display:inline-block;width:.06em;height:.9em;background:var(--accent);vertical-align:-.08em;margin-left:.08em;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero__id{margin-top:clamp(28px,5vh,64px);display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;opacity:0;transform:translateY(20px)}
+.hero__name{font-size:clamp(14px,1.1vw,16px);font-weight:500;color:var(--fg)}
+.hero__role{font-size:13px;color:var(--fg-2);margin-top:4px}
+.hero__claim{margin-top:22px;font-size:clamp(20px,2.4vw,36px);font-weight:400;letter-spacing:-.03em;line-height:1.15;max-width:22ch;color:var(--fg)}
+.hero__claim em{font-style:normal;color:var(--fg-2)}
+.hero__hint{font-size:12px;color:var(--fg-3);display:flex;gap:10px;align-items:center}
+.hero__hint i{display:block;width:34px;height:1px;background:var(--fg-3)}
+.hero__legend{position:relative;z-index:2;display:flex;gap:28px;align-items:center;padding-bottom:22px;font-size:11px;color:var(--fg-3)}
+.hero__legend span{display:flex;align-items:center;gap:8px}
+.hero__legend i{width:6px;height:6px;border-radius:50%;background:var(--fg-3)}
+.hero__legend .on i{background:var(--accent)}
+
+/* living interface: fragments of a design system */
+.frag{position:absolute;left:0;top:0;will-change:transform;opacity:0;pointer-events:none;transform-origin:center}
+.frag > *{border-radius:6px}
+.f-panel{width:150px;height:96px;background:var(--bg-2);border:1px solid var(--line);padding:10px}
+.f-panel b{display:block;width:40%;height:6px;background:var(--fg-3);border-radius:3px;margin-bottom:8px;opacity:.7}
+.f-panel i{display:block;width:70%;height:22px;background:var(--fg);border-radius:3px;opacity:.85}
+.f-panel i.s{width:40%;height:6px;margin-top:8px;background:var(--fg-3);opacity:.5}
+.f-side{width:64px;height:200px;background:var(--bg-2);border:1px solid var(--line);padding:10px 8px;display:grid;gap:8px;align-content:start}
+.f-side i{display:block;height:8px;border-radius:3px;background:var(--fg-3);opacity:.45}
+.f-side i:first-child{background:var(--accent);opacity:1}
+.f-top{width:300px;height:36px;background:var(--bg-2);border:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 12px}
+.f-top i{display:block;height:7px;border-radius:3px;background:var(--fg-3);opacity:.5}
+.f-top i:nth-child(1){width:60px;background:var(--fg);opacity:.9}.f-top i:nth-child(2){width:40px}.f-top i:nth-child(3){width:40px}.f-top i:nth-child(4){width:24px;height:24px;margin-left:auto;border-radius:50%;background:var(--accent);opacity:1}
+.f-table{width:240px;background:var(--bg-2);border:1px solid var(--line);padding:6px 10px;display:grid;gap:7px}
+.f-table i{display:grid;grid-template-columns:1.5fr 1fr 1fr .6fr;gap:8px}
+.f-table i::before,.f-table i::after,.f-table i b{content:"";display:block;height:6px;border-radius:3px;background:var(--fg-3);opacity:.45}
+.f-table i:first-child::before,.f-table i:first-child::after,.f-table i:first-child b{opacity:.9;background:var(--fg)}
+.f-chart{width:170px;height:96px;background:var(--bg-2);border:1px solid var(--line);display:flex;align-items:flex-end;gap:6px;padding:12px}
+.f-chart i{display:block;flex:1;background:var(--fg-3);opacity:.5;border-radius:2px 2px 0 0}
+.f-chart i.a{background:var(--accent);opacity:1}
+.f-form{width:150px;background:var(--bg-2);border:1px solid var(--line);padding:10px;display:grid;gap:8px}
+.f-form i{display:block;height:24px;border:1px solid var(--line);border-radius:4px}
+.f-form i.b{background:var(--accent);border:0;height:26px;width:60%}
+.f-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.02em;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2)}
+.f-chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--hrms)}
+.f-chip.warn::before{background:var(--erp)}
+.f-chip.err::before{background:var(--clarks)}
+.f-node{padding:8px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--accent);color:var(--fg);font-size:11px;font-weight:500;white-space:nowrap;box-shadow:0 0 0 4px rgba(47,69,255,.12)}
+.f-modal{width:180px;background:var(--bg-2);border:1px solid var(--line);padding:12px;display:grid;gap:8px}
+.f-modal b{display:block;width:60%;height:8px;background:var(--fg);opacity:.9;border-radius:3px}
+.f-modal i{display:block;width:100%;height:6px;background:var(--fg-3);opacity:.5;border-radius:3px}
+.f-modal span{display:flex;gap:6px;justify-content:flex-end;margin-top:4px}
+.f-modal span i{width:38px;height:18px;border-radius:4px;opacity:.6}
+.f-modal span i:last-child{background:var(--accent);opacity:1}
+.f-tabs{display:flex;gap:2px;padding:3px;background:var(--bg-2);border:1px solid var(--line);border-radius:6px}
+.f-tabs i{display:block;width:44px;height:16px;border-radius:4px}
+.f-tabs i:first-child{background:var(--bg-3)}
+.hero.ordered .frag{opacity:1}
+
+/* ──────────────────────── 01 · how I think ──────────────────────── */
+.think{padding-top:18vh;padding-bottom:18vh}
+.think__grid{display:grid;grid-template-columns:1fr;gap:clamp(40px,8vh,110px)}
+.think__stmt{font-size:clamp(28px,4.6vw,78px);font-weight:300;letter-spacing:-.04em;line-height:1.02;max-width:18ch;margin:0}
+.think__stmt .dim{color:var(--fg-3);transition:color .6s}
+.think__stmt.in .dim{color:var(--fg)}
+.think__notes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,56px);border-top:1px solid var(--line);padding-top:32px}
+.think__notes div{font-size:15px;color:var(--fg-2);line-height:1.55}
+.think__notes b{display:block;font-weight:500;color:var(--fg);margin-bottom:8px;font-size:14px}
+
+/* ─────────────────── 02 · signature complexity map ─────────────────── */
+.complexity{padding:0}
+.complexity__pin{height:100vh;height:100svh;position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,34%);padding-left:var(--rail)}
+.complexity__svg{width:100%;height:100%;display:block}
+.complexity__svg .edge{stroke:var(--fg-3);stroke-width:1;opacity:.35;fill:none}
+.complexity__svg .edge.keep{stroke:var(--accent)}
+.complexity__svg .node rect{fill:var(--bg-2);stroke:var(--line);rx:8}
+.complexity__svg .node text{fill:var(--fg);font-weight:500;font-family:var(--font)}
+.complexity__svg .node.role rect{stroke:var(--accent);fill:var(--bg)}
+.complexity__svg .lane{fill:none;stroke:var(--line);stroke-dasharray:3 5;opacity:0}
+.complexity__svg .lane-t{fill:var(--fg-3);font-family:var(--font);opacity:0}
+.complexity__copy{padding:0 var(--gutter);display:grid;align-content:center;gap:28px;border-left:1px solid var(--line-2)}
+.complexity__copy .h-m{transition:opacity .5s}
+.complexity__step{display:grid;gap:8px}
+.complexity__step p{margin:0;font-size:15px;color:var(--fg-2);max-width:34ch}
+.complexity__state{display:flex;gap:8px;font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.complexity__state i{width:40px;height:2px;background:var(--line);align-self:center;position:relative;overflow:hidden}
+.complexity__state i::after{content:"";position:absolute;inset:0;background:var(--accent);transform:scaleX(var(--p,0));transform-origin:left}
+
+/* ────────────────────────── 03 · work ────────────────────────── */
+.work-intro{padding-top:20vh;padding-bottom:12vh}
+.work-intro .h-l{max-width:16ch}
+.work-intro__row{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-top:40px}
+.project{min-height:100vh;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,72px);align-items:center;padding-top:10vh;padding-bottom:10vh;--pa:var(--accent)}
+.project:nth-of-type(even){grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.project:nth-of-type(even) .project__text{order:2}
+.project__text{display:grid;gap:22px;align-content:center}
+.project__index{font-size:12px;color:var(--fg-3);display:flex;gap:14px;align-items:center}
+.project__index i{width:24px;height:1px;background:var(--pa)}
+.project__title{font-size:clamp(40px,5.2vw,84px);font-weight:300;letter-spacing:-.04em;line-height:.98;margin:0}
+.project__cat{font-size:14px;color:var(--fg-2)}
+.project__hook{font-size:clamp(17px,1.4vw,22px);line-height:1.45;color:var(--fg);max-width:40ch;margin:0}
+.project__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;max-width:460px;font-size:13px;color:var(--fg-2);border-top:1px solid var(--line);padding-top:16px}
+.project__facts b{display:block;color:var(--fg-3);font-weight:500;font-size:11px;margin-bottom:2px}
+.project__mods{display:flex;flex-wrap:wrap;gap:6px}
+.project__mods span{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--fg-2)}
+.project__cta{display:inline-flex;align-items:center;gap:12px;font-size:14px;font-weight:500;margin-top:6px;color:var(--fg)}
+.project__cta i{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:background .3s,border-color .3s,transform .5s var(--ease)}
+.project__cta:hover i{background:var(--pa);border-color:var(--pa);color:#fff;transform:translateX(4px)}
+.project__cta svg{width:14px;height:14px}
+.project__visual{position:relative;perspective:1400px;min-height:min(60vh,560px)}
+.screen{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .2s;will-change:transform}
+.screen__main{position:absolute;left:0;top:6%;width:88%;height:80%;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.35);display:grid;grid-template-columns:62px 1fr;transform:translateZ(0)}
+.screen__side{border-right:1px solid var(--line-2);padding:14px 10px;display:grid;gap:10px;align-content:start;background:var(--bg-2)}
+.screen__side i{display:block;height:8px;border-radius:3px;background:var(--fg-3);opacity:.4}
+.screen__side i:nth-child(2){background:var(--pa);opacity:1}
+.screen__side i:first-child{width:22px;height:22px;border-radius:6px;background:var(--pa);opacity:1;margin-bottom:6px}
+.screen__body{padding:14px;display:grid;gap:12px;align-content:start}
+.screen__bar{display:flex;align-items:center;gap:10px}
+.screen__bar b{display:block;width:120px;height:9px;border-radius:3px;background:var(--fg);opacity:.9}
+.screen__bar i{display:block;width:60px;height:7px;border-radius:3px;background:var(--fg-3);opacity:.5}
+.screen__bar span{margin-left:auto;display:block;width:72px;height:22px;border-radius:6px;background:var(--pa)}
+.screen__kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.screen__kpis div{border:1px solid var(--line-2);border-radius:6px;padding:9px;height:52px;display:grid;align-content:space-between}
+.screen__kpis i{display:block;height:6px;width:50%;background:var(--fg-3);opacity:.5;border-radius:3px}
+.screen__kpis b{display:block;height:12px;width:70%;background:var(--fg);opacity:.85;border-radius:3px}
+.screen__table{border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;display:grid;gap:8px}
+.screen__table i{display:grid;grid-template-columns:1.6fr 1fr 1fr .8fr .6fr;gap:10px;align-items:center}
+.screen__table i::before,.screen__table i::after,.screen__table i b,.screen__table i em{content:"";display:block;height:6px;border-radius:3px;background:var(--fg-3);opacity:.45}
+.screen__table i em{width:38px;height:12px;border-radius:999px;background:var(--pa);opacity:.9}
+.screen__table i:first-child::before,.screen__table i:first-child::after,.screen__table i:first-child b{opacity:.85;background:var(--fg)}
+.screen__table i:first-child em{opacity:0}
+.screen__float{position:absolute;background:var(--bg);border:1px solid var(--line);border-radius:8px;box-shadow:0 20px 60px -20px rgba(0,0,0,.4);transform:translateZ(60px)}
+.screen__float.a{right:0;top:0;width:34%;padding:12px;display:grid;gap:8px}
+.screen__float.a b{display:block;height:8px;width:55%;background:var(--fg);opacity:.9;border-radius:3px}
+.screen__float.a i{display:block;height:6px;background:var(--fg-3);opacity:.45;border-radius:3px}
+.screen__float.a span{display:flex;gap:6px;justify-content:flex-end;margin-top:2px}
+.screen__float.a span i{width:40px;height:20px;border-radius:5px;opacity:.6}
+.screen__float.a span i:last-child{background:var(--pa);opacity:1}
+.screen__float.b{left:-4%;bottom:0;width:30%;padding:12px;transform:translateZ(90px)}
+.screen__float.b .bars{display:flex;align-items:flex-end;gap:5px;height:56px}
+.screen__float.b .bars i{flex:1;background:var(--fg-3);opacity:.45;border-radius:2px 2px 0 0}
+.screen__float.b .bars i.a{background:var(--pa);opacity:1}
+.screen__float.c{right:8%;bottom:-2%;width:22%;aspect-ratio:9/16;padding:8px;display:grid;gap:6px;align-content:start;border-radius:14px;transform:translateZ(120px)}
+.screen__float.c b{display:block;height:36px;border-radius:8px;background:var(--pa);opacity:.9}
+.screen__float.c i{display:block;height:24px;border-radius:6px;border:1px solid var(--line-2)}
+.screen__mobile-only{display:none}
+.project--hrms{--pa:var(--hrms)} .project--erp{--pa:var(--erp)} .project--clarks{--pa:var(--clarks)} .project--chrm{--pa:var(--chrm)}
+
+/* case study overlay */
+.case{position:fixed;inset:0;z-index:90;background:var(--bg);color:var(--fg);overflow:auto;display:none;--pa:var(--accent);overscroll-behavior:contain}
+.case.open{display:block}
+.case__inner{min-height:100%;padding:0 var(--gutter) 12vh}
+.case__head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:18px 0;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.case__head .small b{color:var(--fg);font-weight:500}
+.case__close{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:500}
+.case__close i{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+.case__close svg{width:14px;height:14px}
+.case__hero{padding:12vh 0 8vh;display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:end;max-width:1360px;margin:0 auto}
+.case__hero h2{font-size:clamp(40px,7vw,120px);font-weight:300;letter-spacing:-.045em;line-height:.95;margin:0}
+.case__hero p{margin:0}
+.case__facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;font-size:13px;color:var(--fg-2);border-left:2px solid var(--pa);padding-left:20px}
+.case__facts b{display:block;font-size:11px;color:var(--fg-3);font-weight:500}
+.case__chapters{max-width:1360px;margin:0 auto;display:grid;gap:0}
+.ch{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,4vw,72px);padding:64px 0;border-top:1px solid var(--line)}
+.ch__head{position:sticky;top:96px;align-self:start}
+.ch__head .n{font-size:12px;color:var(--pa);font-variant-numeric:tabular-nums}
+.ch__head h3{font-size:clamp(26px,3vw,44px);font-weight:400;letter-spacing:-.03em;line-height:1.05;margin:8px 0 6px}
+.ch__head p{margin:0;color:var(--fg-3);font-size:14px}
+.ch__body{display:grid;gap:22px;font-size:16px;line-height:1.6;color:var(--fg-2);max-width:64ch}
+.ch__body p{margin:0}
+.ch__body strong{color:var(--fg);font-weight:500}
+.ch__body ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.ch__body li{padding-left:18px;position:relative}
+.ch__body li::before{content:"";position:absolute;left:0;top:.7em;width:8px;height:1px;background:var(--pa)}
+.ch__vis{margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--bg-2)}
+.ia{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12px}
+.ia div{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg)}
+.ia b{display:block;color:var(--pa);font-weight:600;margin-bottom:6px;font-size:11px}
+.ia span{display:block;color:var(--fg-2);padding:3px 0;border-top:1px solid var(--line-2)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px}
+.ba div{border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--bg)}
+.ba b{display:block;font-size:11px;color:var(--fg-3);margin-bottom:8px;font-weight:500}
+.ba div:last-child b{color:var(--pa)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px}
+.flow span{padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.flow em{font-style:normal;color:var(--pa)}
+.flow span.d{border-color:var(--pa);color:var(--fg)}
+.case__next{max-width:1360px;margin:64px auto 0;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:32px;gap:20px;flex-wrap:wrap}
+
+/* ───────────────────────── 04 · design system ───────────────────────── */
+.system{padding:0}
+.system__pin{height:100vh;height:100svh;position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(300px,38%) minmax(0,1fr);padding-left:var(--rail);gap:var(--gutter)}
+.system__copy{padding:0 0 0 var(--gutter);display:grid;align-content:center;gap:24px}
+.system__copy .h-m{max-width:18ch}
+.system__tokens{display:grid;grid-template-columns:repeat(3,auto);gap:8px 20px;font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums;width:max-content}
+.system__tokens b{color:var(--fg-2);font-weight:500}
+.system__stage{position:relative;display:grid;place-items:center;padding-right:var(--gutter)}
+.dash{position:relative;width:min(100%,760px);aspect-ratio:16/10.4;}
+.dash > .part{position:absolute;will-change:transform;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+.dash .part .tag{position:absolute;left:0;top:-18px;font-size:10px;color:var(--accent);opacity:0;transition:opacity .4s;white-space:nowrap}
+.dash.exploded .part .tag{opacity:1}
+.p-side{left:0;top:0;width:11%;height:100%;padding:8% 12%;display:grid;gap:10px;align-content:start;background:var(--bg-2)}
+.p-side i{display:block;height:7px;border-radius:3px;background:var(--fg-3);opacity:.45}.p-side i:first-child{background:var(--accent);opacity:1}
+.p-top{left:12.5%;top:0;width:87.5%;height:8%;display:flex;align-items:center;gap:10px;padding:0 2%}
+.p-top i{display:block;height:7px;border-radius:3px;background:var(--fg-3);opacity:.5;width:48px}.p-top i:first-child{background:var(--fg);opacity:.9;width:90px}.p-top i:last-child{margin-left:auto;width:20px;height:20px;border-radius:50%;background:var(--accent);opacity:1}
+.p-kpi{top:11%;width:20.5%;height:16%;padding:2%;display:grid;align-content:space-between}
+.p-kpi i{display:block;height:6px;width:50%;background:var(--fg-3);opacity:.5;border-radius:3px}.p-kpi b{display:block;height:14px;width:65%;background:var(--fg);opacity:.85;border-radius:3px}
+.p-kpi.k1{left:12.5%}.p-kpi.k2{left:34.9%}.p-kpi.k3{left:57.2%}.p-kpi.k4{left:79.5%}
+.p-chart{left:12.5%;top:30%;width:52%;height:34%;padding:2%;display:flex;align-items:flex-end;gap:4px}
+.p-chart i{flex:1;background:var(--fg-3);opacity:.45;border-radius:2px 2px 0 0}.p-chart i.a{background:var(--accent);opacity:1}
+.p-status{left:67%;top:30%;width:33%;height:34%;padding:2%;display:grid;gap:8px;align-content:start}
+.p-status span{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--fg-2)}
+.p-status span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--hrms)}
+.p-status span:nth-child(2)::before{background:var(--erp)}.p-status span:nth-child(3)::before{background:var(--clarks)}.p-status span:nth-child(4)::before{background:var(--fg-3)}
+.p-table{left:12.5%;top:67%;width:63%;height:33%;padding:1.5% 2%;display:grid;gap:7px;align-content:start}
+.p-table i{display:grid;grid-template-columns:1.6fr 1fr 1fr .7fr;gap:10px}
+.p-table i::before,.p-table i::after,.p-table i b{content:"";display:block;height:6px;border-radius:3px;background:var(--fg-3);opacity:.45}
+.p-table i:first-child::before,.p-table i:first-child::after,.p-table i:first-child b{opacity:.85;background:var(--fg)}
+.p-form{left:78%;top:67%;width:22%;height:33%;padding:2%;display:grid;gap:8px;align-content:start}
+.p-form i{display:block;height:20px;border:1px solid var(--line);border-radius:4px}.p-form i.b{background:var(--accent);border:0;height:22px}
+.p-modal{left:32%;top:24%;width:36%;height:38%;padding:2.5%;display:grid;gap:10px;align-content:start;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);opacity:0}
+.p-modal b{display:block;height:9px;width:60%;background:var(--fg);opacity:.9;border-radius:3px}.p-modal i{display:block;height:6px;background:var(--fg-3);opacity:.45;border-radius:3px}
+.p-modal span{display:flex;gap:6px;justify-content:flex-end;margin-top:auto}.p-modal span i{width:44px;height:20px;border-radius:5px;opacity:.6}.p-modal span i:last-child{background:var(--accent);opacity:1}
+
+/* ───────────────────────── 05 · more product work ───────────────────────── */
+.more{padding-top:16vh;padding-bottom:16vh;overflow:hidden}
+.more__head{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:40px}
+.strip{display:flex;gap:16px;cursor:grab;user-select:none;will-change:transform;padding-left:calc(var(--rail) + var(--gutter));padding-right:var(--gutter)}
+.strip.dragging{cursor:grabbing}
+.strip__item{flex:0 0 clamp(240px,24vw,320px);border-top:1px solid var(--line);padding-top:18px;display:grid;gap:12px;align-content:start;min-height:220px;position:relative;transition:transform .5s var(--ease)}
+.strip__item::before{content:"";position:absolute;left:0;top:-1px;height:1px;width:0;background:var(--accent);transition:width .6s var(--ease)}
+.strip__item:hover::before{width:100%}
+.strip__item .n{font-size:11px;color:var(--fg-3)}
+.strip__item h4{margin:0;font-size:22px;font-weight:400;letter-spacing:-.02em}
+.strip__item p{margin:0;font-size:14px;color:var(--fg-2);line-height:1.5}
+.strip__item .k{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.strip__item .k span{font-size:11px;color:var(--fg-3);padding:3px 8px;border:1px solid var(--line-2);border-radius:999px}
+.strip__item[data-dom="hrms"] .n{color:var(--hrms)}.strip__item[data-dom="erp"] .n{color:var(--erp)}
+
+/* ─────────────────────────── 06 · process ─────────────────────────── */
+.process{padding-top:16vh;padding-bottom:16vh}
+.process__grid{display:grid;grid-template-columns:5fr 7fr;gap:clamp(32px,6vw,110px);margin-top:56px;align-items:start}
+.process__list{display:grid;border-top:1px solid var(--line)}
+.process__item{display:grid;grid-template-columns:44px 1fr auto;gap:16px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);text-align:left;width:100%;color:var(--fg-3);transition:color .3s}
+.process__item .n{font-size:12px;font-variant-numeric:tabular-nums}
+.process__item .t{font-size:clamp(22px,2.4vw,34px);font-weight:400;letter-spacing:-.03em;line-height:1}
+.process__item .i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .3s,transform .4s var(--ease)}
+.process__item.active,.process__item:hover{color:var(--fg)}
+.process__item.active .i{background:var(--accent);transform:scale(1.6)}
+.process__detail{position:sticky;top:20vh;display:grid;gap:20px;min-height:320px}
+.process__detail p{margin:0;font-size:clamp(17px,1.5vw,22px);line-height:1.45;color:var(--fg);max-width:36ch}
+.process__detail ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px;color:var(--fg-2)}
+.process__detail li{padding-left:18px;position:relative}
+.process__detail li::before{content:"";position:absolute;left:0;top:.7em;width:8px;height:1px;background:var(--accent)}
+.process__viz{height:120px;border:1px solid var(--line);border-radius:8px;position:relative;overflow:hidden;background:var(--bg-2)}
+.process__viz svg{width:100%;height:100%}
+.process__viz .n{fill:var(--bg);stroke:var(--line);stroke-width:1}
+.process__viz .n.on{stroke:var(--accent);fill:var(--bg)}
+.process__viz .e{stroke:var(--line);stroke-width:1;fill:none}
+.process__viz .e.on{stroke:var(--accent)}
+.process__viz text{font-size:9px;fill:var(--fg-2);font-family:var(--font)}
+
+/* ─────────────────────────── 07 · journey ─────────────────────────── */
+.journey{padding-top:16vh;padding-bottom:16vh}
+.journey__intro{display:grid;grid-template-columns:5fr 7fr;gap:40px;align-items:end;margin-bottom:64px}
+.versions{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1px solid var(--line)}
+.versions__line{position:absolute;left:0;top:-1px;height:1px;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.ver{padding:28px 20px 0 0;display:grid;gap:10px;align-content:start;position:relative;text-align:left;width:100%}
+.ver::before{content:"";position:absolute;left:0;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .4s,transform .4s var(--ease)}
+.ver.lit::before{background:var(--accent);transform:scale(1.5)}
+.ver .v{font-size:clamp(28px,3.4vw,54px);font-weight:300;letter-spacing:-.04em;line-height:1;color:var(--fg-3);transition:color .5s}
+.ver.lit .v{color:var(--fg)}
+.ver .d{font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.ver .t{font-size:15px;font-weight:500;color:var(--fg)}
+.ver .s{font-size:13px;color:var(--fg-2);line-height:1.5;max-width:26ch}
+.ver--next .v{color:var(--accent)}
+.ver--next .v{opacity:.9}
+.journey__note{margin-top:56px;display:grid;grid-template-columns:5fr 7fr;gap:40px;font-size:14px;color:var(--fg-2)}
+.journey__note b{color:var(--fg);font-weight:500}
+
+/* ──────────────────────────── 08 · about ──────────────────────────── */
+.about{padding-top:18vh;padding-bottom:18vh}
+.about__grid{display:grid;grid-template-columns:6fr 6fr;gap:clamp(32px,6vw,120px);align-items:start}
+.about__stmt{font-size:clamp(34px,5.4vw,92px);font-weight:300;letter-spacing:-.045em;line-height:.98;margin:0;position:sticky;top:18vh}
+.about__stmt .dim{color:var(--fg-3)}
+.about__text{display:grid;gap:22px;font-size:clamp(16px,1.25vw,19px);line-height:1.6;color:var(--fg-2);padding-top:.6em}
+.about__text p{margin:0}
+.about__text strong{color:var(--fg);font-weight:500}
+.about__list{display:grid;gap:0;margin-top:12px;border-top:1px solid var(--line)}
+.about__list div{display:grid;grid-template-columns:1fr auto;gap:20px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--fg)}
+.about__list span{color:var(--fg-3);font-size:12px}
+
+/* ────────────────────────── 09 · capabilities ────────────────────────── */
+.caps{padding-top:14vh;padding-bottom:14vh}
+.caps__grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:48px}
+.cap{position:relative;padding:28px 24px 28px 0;border-right:1px solid var(--line-2);transition:background .4s;min-height:300px;display:grid;align-content:start;gap:14px}
+.cap:last-child{border-right:0}
+.cap:hover{background:var(--bg-2)}
+.cap h4{margin:0;font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cap h4 i{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .3s,transform .5s var(--ease);transform:scale(0)}
+.cap:hover h4 i{opacity:1;transform:scale(1)}
+.cap ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px;color:var(--fg-2)}
+.cap li{transition:transform .5s var(--ease),color .3s}
+.cap:hover li{color:var(--fg);transform:translateX(6px)}
+.cap:hover li:nth-child(2){transition-delay:.04s}.cap:hover li:nth-child(3){transition-delay:.08s}.cap:hover li:nth-child(4){transition-delay:.12s}.cap:hover li:nth-child(5){transition-delay:.16s}
+.cap p{margin:auto 0 0;font-size:12px;color:var(--fg-3);line-height:1.5;max-width:24ch}
+
+/* ─────────────────────────────── 10 · scale ─────────────────────────────── */
+.scale{padding-top:10vh;padding-bottom:16vh}
+.scale__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+.stat{padding:32px 24px 32px 0;border-right:1px solid var(--line-2);display:grid;gap:8px;align-content:start}
+.stat:last-child{border-right:0}
+.stat .v{font-size:clamp(48px,7vw,120px);font-weight:300;letter-spacing:-.05em;line-height:.95;font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:4px}
+.stat .v small{font-size:.35em;color:var(--accent);font-weight:400;letter-spacing:0}
+.stat .l{font-size:14px;color:var(--fg);font-weight:500}
+.stat .s{font-size:13px;color:var(--fg-3);line-height:1.5}
+.scale__modules{margin-top:56px;display:flex;flex-wrap:wrap;gap:8px 0}
+.scale__modules span{font-size:clamp(14px,1.4vw,20px);color:var(--fg-3);padding:0 14px 0 0;transition:color .3s}
+.scale__modules span::after{content:"/";margin-left:14px;color:var(--line)}
+.scale__modules span:last-child::after{content:""}
+.scale__modules span:hover{color:var(--fg)}
+.scale__modules span[data-dom="erp"]:hover{color:var(--erp)}.scale__modules span[data-dom="hrms"]:hover{color:var(--hrms)}
+
+/* ────────────────────────────── 11 · contact ────────────────────────────── */
+.contact{min-height:100vh;display:grid;align-content:center;padding-top:14vh;padding-bottom:12vh;position:relative;overflow:hidden}
+.contact__radial{position:absolute;left:30%;top:60%;width:80vmax;height:80vmax;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(47,69,255,.14),transparent 70%);pointer-events:none}
+.contact__grid{position:relative;display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:end}
+.contact__stmt{font-size:clamp(36px,6vw,104px);font-weight:300;letter-spacing:-.045em;line-height:.96;margin:0;max-width:14ch}
+.contact__stmt .dim{color:var(--fg-3)}
+.contact__cta{margin-top:56px}
+.cta{position:relative;display:inline-flex;align-items:center;gap:18px;height:72px;padding:0 30px;border-radius:999px;border:1px solid var(--line);font-size:clamp(15px,1.3vw,18px);font-weight:500;overflow:hidden;transition:transform .5s var(--ease),border-color .4s,color .4s;will-change:transform}
+.cta::before{content:"";position:absolute;inset:0;background:var(--accent);border-radius:999px;transform:scale(0);transform-origin:var(--ox,50%) var(--oy,50%);transition:transform .6s var(--ease);z-index:-1}
+.cta:hover{color:#fff;border-color:var(--accent);transform:scale(1.06)}
+.cta:hover::before{transform:scale(1.5)}
+.cta svg{width:20px;height:20px;transition:transform .5s var(--ease)}
+.cta:hover svg{transform:translateX(8px)}
+.contact__links{display:grid;gap:0;border-top:1px solid var(--line)}
+.contact__links a,.contact__links div{display:grid;grid-template-columns:110px 1fr auto;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px}
+.contact__links span{color:var(--fg-3);font-size:12px}
+.contact__links svg{width:14px;height:14px;opacity:.5;transition:opacity .3s,transform .4s var(--ease)}
+.contact__links a:hover svg{opacity:1;transform:translate(3px,-3px)}
+.contact__links .resume{display:flex;gap:16px;font-size:14px}
+.contact__links .resume a{display:inline;padding:0;border:0;grid-template-columns:none}
+.foot{position:relative;margin-top:14vh;display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--fg-3)}
+.foot kbd{font:inherit;padding:2px 6px;border:1px solid var(--line);border-radius:4px;color:var(--fg-2);margin:0 2px}
+
+/* ───────────────────────────── responsive ───────────────────────────── */
+@media (max-width:1180px){
+  .caps__grid{grid-template-columns:repeat(3,1fr)}
+  .cap{border-bottom:1px solid var(--line-2);min-height:auto}
+  .cap:nth-child(3n){border-right:0}
+  .scale__grid{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line-2)}
+}
+@media (max-width:1024px){
+  :root{--rail:40px}
+  .rail__chapter{display:none}
+  .project,.project:nth-of-type(even){grid-template-columns:1fr;min-height:auto;gap:36px}
+  .project:nth-of-type(even) .project__text{order:0}
+  .project__visual{min-height:52vw}
+  .complexity__pin{grid-template-columns:1fr;grid-template-rows:1fr auto}
+  .complexity__copy{border-left:0;padding:18px var(--gutter) 90px;border-top:1px solid var(--line-2);gap:14px}
+  .complexity__copy .h-m{font-size:20px}
+  .system__pin{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:12px}
+  .system__copy{padding:80px var(--gutter) 0}
+  .system__stage{padding:0 var(--gutter) 90px}
+  .split,.process__grid,.journey__intro,.about__grid,.contact__grid,.journey__note,.case__hero,.ch{grid-template-columns:1fr}
+  .about__stmt{position:static}
+  .versions{grid-template-columns:1fr;border-top:0;border-left:1px solid var(--line);padding-left:20px}
+  .versions__line{width:1px;height:100%;top:0;left:-1px;transform-origin:top;transform:scaleY(0)}
+  .ver{padding:0 0 32px}
+  .ver::before{left:-24px;top:10px}
+  .ch__head{position:static}
+}
+@media (max-width:768px){
+  :root{--rail:0px}
+  .rail,.progress{display:none}
+  .section{padding-left:var(--gutter)}
+  .strip{padding-left:var(--gutter)}
+  .hero__body{padding-top:16vh}
+  .hero__id{grid-template-columns:1fr;gap:20px}
+  .hero__hint,.hero__coords{display:none}
+  .frag{display:none}
+  .frag.mobile-keep{display:block}
+  .hero__radial{left:70%;top:35%}
+  .think__notes{grid-template-columns:1fr;gap:20px}
+  .think__stmt{max-width:none}
+  .nav{bottom:14px;max-width:calc(100% - 28px)}
+  .nav a{padding:9px 11px;font-size:12px}
+  .nav__pos{display:none}
+  .caps__grid{grid-template-columns:1fr}
+  .cap{border-right:0;padding-right:0}
+  .scale__grid{grid-template-columns:1fr}
+  .stat{border-right:0;border-bottom:1px solid var(--line-2)}
+  .stat:last-child{border-bottom:0}
+  .contact__links a,.contact__links div{grid-template-columns:80px 1fr auto}
+  .cta{height:60px;padding:0 22px;font-size:14px}
+  .project__facts{grid-template-columns:1fr 1fr}
+  .screen__float.c{display:none}
+  .screen__float.b{left:0}
+  .ia{grid-template-columns:1fr}
+  .ba{grid-template-columns:1fr}
+  .case__facts{grid-template-columns:1fr 1fr}
+  .complexity__pin{padding-left:0}
+  .system__pin{padding-left:0}
+  .system__tokens{grid-template-columns:1fr 1fr;width:auto}
+  .complexity__pin{grid-template-rows:52% 48%}
+  .complexity__copy{padding-bottom:80px;align-content:start;padding-top:20px}
+  .process__list{border-top:1px solid var(--line)}
+  .process__detail{position:static;min-height:auto;display:none}
+  .process__detail.mobile-open{display:grid}
+  .process__mobile{display:block;font-size:14px;color:var(--fg-2);padding:0 0 18px 60px;line-height:1.5}
+  .journey__intro{margin-bottom:40px}
+  .foot{flex-direction:column;align-items:flex-start}
+  .foot .keys{display:none}
+  .work-intro__row{grid-template-columns:1fr}
+}
+@media (min-width:769px){ .process__mobile{display:none} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .reveal-lines .l>span,.fade{transform:none;opacity:1}
+  .hero.ordered .frag{opacity:1}
+}
+</style>
+<noscript><style>.loader{display:none}.frag,.reveal-lines .l>span,.fade{opacity:1;transform:none}.hero__id{opacity:1;transform:none}.cursor{display:none!important}</style></noscript>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="gridlayer" aria-hidden="true"></div>
+
+<!-- loader -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__title"><b>Dennis Joel Raj</b> — building experience</div>
+  <div class="loader__list">
+    <div class="loader__row"><span>01 Structure</span><span>ok</span></div>
+    <div class="loader__row"><span>02 System</span><span>ok</span></div>
+    <div class="loader__row"><span>03 Interaction</span><span>ok</span></div>
+    <div class="loader__row"><span>04 Ready</span><span>ok</span></div>
+  </div>
+  <div class="loader__bar" id="loaderBar"></div>
+</div>
+
+<!-- cursor -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"><span class="cursor__label" id="cursorLabel"></span></div>
+</div>
+
+<!-- rail + progress -->
+<aside class="rail" aria-hidden="true">
+  <div class="rail__ticks"></div>
+  <div class="rail__chapter"><b id="railChapter">00</b> &nbsp;<span id="railName">Index</span></div>
+  <div class="rail__coords" id="railCoords">y 0000</div>
+</aside>
+<div class="progress" aria-hidden="true"><div class="progress__fill" id="progressFill"></div></div>
+
+<!-- navigation capsule -->
+<nav class="nav" id="nav" aria-label="Site">
+  <div class="nav__pill" id="navPill"></div>
+  <a href="#intro" data-nav="intro">Index</a>
+  <a href="#work" data-nav="work">Work</a>
+  <a href="#about" data-nav="about">About</a>
+  <a href="#journey" data-nav="journey">Journey</a>
+  <a href="#contact" data-nav="contact">Contact</a>
+  <span class="nav__pos" id="navPos">00 / 11</span>
+</nav>
+
+<main id="main">
+
+<!-- ═══════════════ 00 · INTRO ═══════════════ -->
+<section class="section hero" id="intro" data-theme="dark" data-chapter="00" data-name="Index">
+  <div class="hero__stage" id="heroStage" aria-hidden="true">
+    <div class="hero__radial"></div>
+    <div class="frag" data-tx="34" data-ty="8"><div class="f-top"></div></div>
+    <div class="frag" data-tx="12" data-ty="8"><div class="f-side"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="frag" data-tx="36" data-ty="20"><div class="f-panel"><b></b><i></i><i class="s"></i></div></div>
+    <div class="frag" data-tx="56" data-ty="20"><div class="f-panel"><b></b><i></i><i class="s"></i></div></div>
+    <div class="frag" data-tx="76" data-ty="20"><div class="f-chart"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i class="a" style="height:85%"></i><i style="height:60%"></i><i style="height:70%"></i></div></div>
+    <div class="frag" data-tx="36" data-ty="46"><div class="f-table"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div></div>
+    <div class="frag" data-tx="68" data-ty="46"><div class="f-form"><i></i><i></i><i class="b"></i></div></div>
+    <div class="frag" data-tx="86" data-ty="50"><div class="f-modal"><b></b><i></i><i></i><span><i></i><i></i></span></div></div>
+    <div class="frag" data-tx="40" data-ty="76"><span class="f-chip">Approved</span></div>
+    <div class="frag" data-tx="52" data-ty="76"><span class="f-chip warn">Pending</span></div>
+    <div class="frag" data-tx="64" data-ty="76"><span class="f-chip err">Rejected</span></div>
+    <div class="frag mobile-keep" data-tx="78" data-ty="78" data-mtx="30" data-mty="78"><span class="f-node">Manager approval</span></div>
+    <div class="frag mobile-keep" data-tx="92" data-ty="86" data-mtx="66" data-mty="88"><span class="f-node">Payroll run</span></div>
+    <div class="frag" data-tx="20" data-ty="70"><div class="f-tabs"><i></i><i></i><i></i></div></div>
+  </div>
+  <div class="hero__coords" aria-hidden="true"><span>x <b id="cx">0000</b></span><span>y <b id="cy">0000</b></span><span id="heroOrder">order 0.00</span></div>
+  <div class="hero__body">
+    <h1 class="hero__typed" id="typed"><span class="w">Designing</span> <span class="w" id="typedWord">systems.</span><span class="caret"></span></h1>
+    <div class="hero__id" id="heroId">
+      <div>
+        <div class="hero__name">Dennis Joel Raj D</div>
+        <div class="hero__role">Team Lead – UI/UX Designer · Enterprise product design · Chennai</div>
+        <p class="hero__claim">I design the systems behind the screens — <em>HRMS, ERP and manufacturing software where hundreds of rules have to feel like a few clear decisions.</em></p>
+      </div>
+      <div class="hero__hint"><i></i> move the pointer, then scroll</div>
+    </div>
+  </div>
+  <div class="hero__legend" aria-hidden="true">
+    <span id="lg0" class="on"><i></i>chaos</span><span id="lg1"><i></i>system</span><span id="lg2"><i></i>clarity</span>
+  </div>
+</section>
+
+<!-- ═══════════════ 01 · HOW I THINK ═══════════════ -->
+<section class="section think" id="think" data-theme="dark" data-chapter="01" data-name="How I think">
+  <div class="wrap think__grid">
+    <p class="think__stmt" data-stmt>Designing the interface is the easy part. <span class="dim">Understanding the system behind it is where the work begins.</span></p>
+    <div class="think__notes">
+      <div class="fade"><b>Every screen is a policy</b>An attendance grid is a set of shift rules, cut-off times and exceptions made visible. If the rules aren't understood, the screen only looks finished.</div>
+      <div class="fade"><b>Roles, not pages</b>The same payroll run means something different to an employee, a manager, HR and finance. I design what each of them needs to see — and what they never should.</div>
+      <div class="fade"><b>Systems before surfaces</b>One component library, three products, two platforms. Consistency is cheaper to design once than to fix in every release.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 02 · COMPLEXITY MAP ═══════════════ -->
+<section class="section complexity" id="complexity" data-theme="dark" data-chapter="02" data-name="Complexity">
+  <div class="complexity__pin" id="complexityPin">
+    <svg class="complexity__svg" id="cmap" viewBox="0 0 900 640" preserveAspectRatio="xMidYMid meet" aria-label="Seventeen enterprise workflow nodes reorganising into employee, manager and admin views"></svg>
+    <div class="complexity__copy">
+      <div class="chapter-num">An enterprise product, before and after design</div>
+      <h2 class="h-m" id="cmapTitle">Seventeen modules. Every one of them talks to the others.</h2>
+      <div class="complexity__step">
+        <p id="cmapText">This is what an HRMS or ERP looks like on day one: payroll depends on attendance, attendance depends on leave, leave waits on approval, and everything reports upward.</p>
+      </div>
+      <div class="complexity__state" id="cmapState"><span>tangled</span><i style="--p:0"></i><span>by role</span><i style="--p:0"></i><span>clear</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 03 · SELECTED WORK ═══════════════ -->
+<section class="section work-intro" id="work" data-theme="light" data-chapter="03" data-name="Selected work">
+  <div class="wrap">
+    <div class="chapter-num">Selected work</div>
+    <h2 class="h-l reveal-lines" style="margin-top:18px"><span class="l"><span>Four products,</span></span><span class="l"><span>owned end to end.</span></span></h2>
+    <div class="work-intro__row">
+      <p class="lede">Two enterprise platforms designed as the primary designer at Ardens Business Solutions, and two live client products delivered independently. Each one is an exercise in deciding who sees what.</p>
+      <div class="small">Hover a screen to tilt it. Open a case to read the decisions.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section project project--hrms" data-theme="light" data-chapter="04" data-name="HRMS" data-case="hrms">
+  <div class="project__text">
+    <div class="project__index"><i></i>01 / 04 · Enterprise HRMS</div>
+    <h3 class="project__title">One workforce, three ways of seeing it.</h3>
+    <div class="project__cat">HRMS platform · Web and mobile · Ardens Business Solutions</div>
+    <p class="project__hook">Attendance, leave, payroll, timesheets, recruitment, onboarding and compliance — designed so an employee, a manager and HR each get a product that feels built for them.</p>
+    <div class="project__facts">
+      <div><b>Role</b>Primary UI/UX designer → Team Lead</div>
+      <div><b>Platforms</b>Responsive web, mobile app</div>
+      <div><b>Users</b>Employees, managers, HR, admins</div>
+      <div><b>Hardest part</b>Rule-driven workflows with many exceptions</div>
+    </div>
+    <div class="project__mods"><span>Attendance</span><span>Leave</span><span>Payroll</span><span>Timesheets</span><span>Recruitment</span><span>Onboarding</span><span>Compliance</span><span>Approvals</span></div>
+    <button class="project__cta" data-open="hrms">Open the case study <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button>
+  </div>
+  <div class="project__visual" data-cursor="View case" data-open="hrms">
+    <div class="screen" data-tilt>
+      <div class="screen__main"><div class="screen__side"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="screen__body"><div class="screen__bar"><b></b><i></i><i></i><span></span></div>
+          <div class="screen__kpis"><div><i></i><b></b></div><div><i></i><b></b></div><div><i></i><b></b></div><div><i></i><b></b></div></div>
+          <div class="screen__table"><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i></div></div></div>
+      <div class="screen__float a"><b></b><i></i><i></i><i style="width:70%"></i><span><i></i><i></i></span></div>
+      <div class="screen__float c"><b></b><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>
+
+<section class="section project project--erp" data-theme="light" data-chapter="05" data-name="Manufacturing ERP" data-case="erp">
+  <div class="project__text">
+    <div class="project__index"><i></i>02 / 04 · Manufacturing ERP</div>
+    <h3 class="project__title">From purchase order to dispatch, without losing the thread.</h3>
+    <div class="project__cat">ERP and Manufacturing ERP · Web · Ardens Business Solutions</div>
+    <p class="project__hook">Inventory, purchase, sales, manufacturing and quality control share one data model. The design job was making a chain of dependent approvals readable at every stage.</p>
+    <div class="project__facts">
+      <div><b>Role</b>Primary UI/UX designer</div>
+      <div><b>Platforms</b>Responsive web, dashboards</div>
+      <div><b>Users</b>Stores, purchase, production, QC, sales</div>
+      <div><b>Hardest part</b>Data-dense tables that still show state</div>
+    </div>
+    <div class="project__mods"><span>Inventory</span><span>Purchase</span><span>Sales</span><span>Manufacturing</span><span>Quality control</span><span>Order management</span><span>Dashboards</span></div>
+    <button class="project__cta" data-open="erp">Open the case study <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button>
+  </div>
+  <div class="project__visual" data-cursor="View case" data-open="erp">
+    <div class="screen" data-tilt>
+      <div class="screen__main"><div class="screen__side"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="screen__body"><div class="screen__bar"><b></b><i></i><i></i><span></span></div>
+          <div class="screen__kpis"><div><i></i><b></b></div><div><i></i><b></b></div><div><i></i><b></b></div><div><i></i><b></b></div></div>
+          <div class="screen__table"><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i></div></div></div>
+      <div class="screen__float b"><div class="bars"><i style="height:40%"></i><i style="height:70%"></i><i style="height:55%"></i><i class="a" style="height:95%"></i><i style="height:65%"></i><i style="height:80%"></i><i style="height:50%"></i></div></div>
+      <div class="screen__float a"><b></b><i></i><i></i><span><i></i><i></i></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section project project--clarks" data-theme="light" data-chapter="06" data-name="Clarks" data-case="clarks">
+  <div class="project__text">
+    <div class="project__index"><i></i>03 / 04 · Client product</div>
+    <h3 class="project__title">Clarks.</h3>
+    <div class="project__cat">Footwear retail · End-to-end product design · Freelance, live</div>
+    <p class="project__hook">A live digital product for a global footwear brand, owned from requirements to production-ready screens — where the constraint was a brand people already know, not a workflow nobody has seen.</p>
+    <div class="project__facts">
+      <div><b>Role</b>Freelance UI/UX designer, sole</div>
+      <div><b>Scope</b>IA, flows, wireframes, prototype, UI</div>
+      <div><b>Users</b>Retail customers</div>
+      <div><b>Hardest part</b>Consistency across the full journey</div>
+    </div>
+    <div class="project__mods"><span>Information architecture</span><span>User flows</span><span>Prototyping</span><span>Visual system</span></div>
+    <button class="project__cta" data-open="clarks">Open the case study <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button>
+  </div>
+  <div class="project__visual" data-cursor="View case" data-open="clarks">
+    <div class="screen" data-tilt>
+      <div class="screen__main" style="grid-template-columns:1fr"><div class="screen__body" style="padding:0">
+        <div class="screen__bar" style="padding:14px 16px;border-bottom:1px solid var(--line-2)"><b style="width:70px"></b><i></i><i></i><i></i><span style="width:28px;border-radius:50%;height:28px"></span></div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px"><div style="aspect-ratio:4/3;border-radius:8px;background:linear-gradient(135deg,var(--bg-3),var(--bg-2))"></div>
+        <div style="display:grid;gap:10px;align-content:start"><b style="display:block;height:14px;width:80%;background:var(--fg);opacity:.9;border-radius:3px"></b><i style="display:block;height:7px;width:40%;background:var(--fg-3);opacity:.5;border-radius:3px"></i><div style="display:flex;gap:6px;margin-top:6px"><i style="display:block;width:30px;height:30px;border-radius:50%;background:var(--pa)"></i><i style="display:block;width:30px;height:30px;border-radius:50%;background:var(--bg-3)"></i><i style="display:block;width:30px;height:30px;border-radius:50%;background:var(--fg-3)"></i></div><i style="display:block;height:36px;width:60%;border-radius:6px;background:var(--pa);margin-top:8px"></i></div></div>
+      </div></div>
+      <div class="screen__float c"><b style="height:80px;background:var(--bg-3)"></b><i></i><i></i><i style="background:var(--pa);border:0"></i></div>
+    </div>
+  </div>
+</section>
+
+<section class="section project project--chrm" data-theme="light" data-chapter="07" data-name="CHRM" data-case="chrm">
+  <div class="project__text">
+    <div class="project__index"><i></i>04 / 04 · Client product</div>
+    <h3 class="project__title">CHRM.</h3>
+    <div class="project__cat">HR services · Consolidated HRM Services Pvt. Ltd. · Freelance, live</div>
+    <p class="project__hook">A digital product for an organised-sector HR services company: service workflows turned into structured journeys, delivered with an interface system built to grow with the organisation.</p>
+    <div class="project__facts">
+      <div><b>Role</b>Freelance UI/UX designer, sole</div>
+      <div><b>Scope</b>IA, flows, wireframes, prototype, UI</div>
+      <div><b>Users</b>Clients and HR service teams</div>
+      <div><b>Hardest part</b>Turning service processes into product steps</div>
+    </div>
+    <div class="project__mods"><span>Service workflows</span><span>User journeys</span><span>Interface system</span><span>Stakeholder iteration</span></div>
+    <button class="project__cta" data-open="chrm">Open the case study <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button>
+  </div>
+  <div class="project__visual" data-cursor="View case" data-open="chrm">
+    <div class="screen" data-tilt>
+      <div class="screen__main"><div class="screen__side"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="screen__body"><div class="screen__bar"><b></b><i></i><span></span></div>
+          <div class="screen__kpis" style="grid-template-columns:repeat(3,1fr)"><div><i></i><b></b></div><div><i></i><b></b></div><div><i></i><b></b></div></div>
+          <div class="screen__table"><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i><i><b></b><em></em></i></div></div></div>
+      <div class="screen__float a"><b></b><i></i><i></i><i style="width:60%"></i><span><i></i><i></i></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 04 · DESIGN SYSTEM ═══════════════ -->
+<section class="section system" id="system" data-theme="light" data-chapter="08" data-name="System">
+  <div class="system__pin" id="systemPin">
+    <div class="system__copy">
+      <div class="chapter-num">Design system</div>
+      <h2 class="h-m">I don't design screens. I design the system that generates them.</h2>
+      <p class="lede" style="font-size:16px">Three products, two platforms, one component library. Sidebars, tables, status chips, forms and charts are defined once, then assembled into every module — so a new screen is a composition, not a new drawing.</p>
+      <div class="system__tokens" aria-label="Design tokens">
+        <span><b>Spacing</b> 4 · 8 · 12 · 16 · 24 · 32</span><span><b>Radius</b> 4 · 6 · 8</span><span><b>Type</b> 12 / 14 / 16 / 20 / 28</span>
+        <span><b>Status</b> approved · pending · rejected</span><span><b>Density</b> comfortable · compact</span><span><b>Grid</b> 12 col · 24 gutter</span>
+      </div>
+      <div class="small" id="systemHint">Scroll to assemble the dashboard.</div>
+    </div>
+    <div class="system__stage">
+      <div class="dash exploded" id="dash" aria-label="Enterprise dashboard assembled from design-system parts">
+        <div class="part p-side"><span class="tag">Navigation</span><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="part p-top"><span class="tag">Top bar</span><i></i><i></i><i></i><i></i></div>
+        <div class="part p-kpi k1"><span class="tag">Card · KPI</span><i></i><b></b></div>
+        <div class="part p-kpi k2"><span class="tag">Card · KPI</span><i></i><b></b></div>
+        <div class="part p-kpi k3"><span class="tag">Card · KPI</span><i></i><b></b></div>
+        <div class="part p-kpi k4"><span class="tag">Card · KPI</span><i></i><b></b></div>
+        <div class="part p-chart"><span class="tag">Chart</span><i style="height:40%"></i><i style="height:60%"></i><i style="height:45%"></i><i style="height:75%"></i><i class="a" style="height:95%"></i><i style="height:55%"></i><i style="height:70%"></i><i style="height:50%"></i><i style="height:80%"></i><i style="height:65%"></i></div>
+        <div class="part p-status"><span class="tag">Status indicators</span><span>Approved</span><span>Pending manager</span><span>Rejected</span><span>Draft</span></div>
+        <div class="part p-table"><span class="tag">Table</span><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+        <div class="part p-form"><span class="tag">Inputs · Button</span><i></i><i></i><i></i><i class="b"></i></div>
+        <div class="part p-modal"><span class="tag">Modal</span><b></b><i></i><i></i><i style="width:70%"></i><span><i></i><i></i></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 05 · MORE PRODUCT WORK ═══════════════ -->
+<section class="section more" id="more" data-theme="light" data-chapter="09" data-name="More work" style="padding-left:0;padding-right:0">
+  <div class="more__head" style="padding-left:calc(var(--rail) + var(--gutter));padding-right:var(--gutter)">
+    <div><div class="chapter-num">More product work</div><h2 class="h-m" style="margin-top:14px;max-width:20ch">Modules that never got a hero image, but shipped.</h2></div>
+    <div class="small">Drag sideways</div>
+  </div>
+  <div class="strip" id="strip" data-cursor="Drag">
+    <div class="strip__item" data-dom="hrms"><div class="n">HRMS</div><h4>Employee lifecycle</h4><p>From offer letter to exit — one record, many states, and the right actions surfaced at each one.</p><div class="k"><span>Offer</span><span>Probation</span><span>Exit</span></div></div>
+    <div class="strip__item" data-dom="hrms"><div class="n">HRMS</div><h4>Reimbursement</h4><p>Claims with proof, policy caps and multi-level approval, designed so rejections explain themselves.</p><div class="k"><span>Claims</span><span>Policy limits</span><span>Approvals</span></div></div>
+    <div class="strip__item" data-dom="hrms"><div class="n">HRMS</div><h4>Recruitment pipeline</h4><p>Requisition, candidates, interviews and offers as a single board that hiring managers and HR share.</p><div class="k"><span>Pipeline</span><span>Interviews</span><span>Offers</span></div></div>
+    <div class="strip__item" data-dom="hrms"><div class="n">HRMS</div><h4>Compliance</h4><p>Statutory checklists and document tracking that make what's overdue impossible to miss.</p><div class="k"><span>Documents</span><span>Deadlines</span></div></div>
+    <div class="strip__item" data-dom="erp"><div class="n">ERP</div><h4>Purchase</h4><p>Indent to PO to GRN, with quantity and price variances shown where the approver actually looks.</p><div class="k"><span>Indent</span><span>PO</span><span>GRN</span></div></div>
+    <div class="strip__item" data-dom="erp"><div class="n">ERP</div><h4>Quality control</h4><p>Inspection plans and pass/fail states that feed straight back into inventory and dispatch.</p><div class="k"><span>Inspection</span><span>Hold</span><span>Release</span></div></div>
+    <div class="strip__item" data-dom="erp"><div class="n">ERP</div><h4>Order management</h4><p>Sales order to dispatch, tracked as one status line instead of five separate screens.</p><div class="k"><span>Orders</span><span>Dispatch</span></div></div>
+    <div class="strip__item" data-dom="erp"><div class="n">ERP</div><h4>Service management</h4><p>Tickets, technicians and parts — a field workflow designed for phones with bad signal.</p><div class="k"><span>Tickets</span><span>Mobile</span></div></div>
+    <div class="strip__item" data-dom="hrms"><div class="n">HRMS · Mobile</div><h4>Mobile app</h4><p>Punch-in, leave, payslips and approvals rebuilt for one thumb, sharing tokens with the web app.</p><div class="k"><span>Attendance</span><span>Approvals</span><span>Payslips</span></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 06 · PROCESS ═══════════════ -->
+<section class="section process" id="process" data-theme="light" data-chapter="10" data-name="How I work">
+  <div class="wrap">
+    <div class="chapter-num">How I work</div>
+    <h2 class="h-l" style="margin-top:18px;max-width:14ch">Enterprise work has its own shape.</h2>
+    <div class="process__grid">
+      <div class="process__list" id="processList" role="tablist" aria-label="Process steps">
+        <button class="process__item active" role="tab" aria-selected="true" data-step="0"><span class="n">01</span><span class="t">Understand</span><span class="i"></span></button>
+        <div class="process__mobile" data-for="0">Users, business rules and product constraints — before any screen. What does the policy say? What does the payroll engine actually need?</div>
+        <button class="process__item" role="tab" aria-selected="false" data-step="1"><span class="n">02</span><span class="t">Map</span><span class="i"></span></button>
+        <div class="process__mobile" data-for="1">Break the complexity into roles, workflows and states. Who initiates, who approves, who only needs to be told.</div>
+        <button class="process__item" role="tab" aria-selected="false" data-step="2"><span class="n">03</span><span class="t">Structure</span><span class="i"></span></button>
+        <div class="process__mobile" data-for="2">Information architecture and interaction hierarchy. Which action is primary on this screen, for this role, at this state.</div>
+        <button class="process__item" role="tab" aria-selected="false" data-step="3"><span class="n">04</span><span class="t">Design</span><span class="i"></span></button>
+        <div class="process__mobile" data-for="3">Scalable interface systems: components first, screens as compositions, with AI-assisted exploration to try more directions early.</div>
+        <button class="process__item" role="tab" aria-selected="false" data-step="4"><span class="n">05</span><span class="t">Validate</span><span class="i"></span></button>
+        <div class="process__mobile" data-for="4">Usability testing on real flows, edge cases and error states — the month-end payroll, not the happy path.</div>
+        <button class="process__item" role="tab" aria-selected="false" data-step="5"><span class="n">06</span><span class="t">Evolve</span><span class="i"></span></button>
+        <div class="process__mobile" data-for="5">Requirements grow after launch. The system is designed so the next module inherits the decisions of the last.</div>
+      </div>
+      <div class="process__detail" id="processDetail">
+        <div class="process__viz" aria-hidden="true"><svg viewBox="0 0 520 120" id="processViz"></svg></div>
+        <p id="processText"></p>
+        <ul id="processPoints"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 · JOURNEY ═══════════════ -->
+<section class="section journey" id="journey" data-theme="dark" data-chapter="11" data-name="Journey">
+  <div class="wrap">
+    <div class="journey__intro">
+      <div><div class="chapter-num">Career, as release notes</div><h2 class="h-l" style="margin-top:18px">Four versions in twenty-two months.</h2></div>
+      <p class="lede">Ardens Business Solutions (ABShrms), an enterprise HRMS and ERP SaaS company. Joined as a trainee in June 2024; promoted three times, each one a wider scope of ownership.</p>
+    </div>
+    <div class="versions" id="versions">
+      <div class="versions__line" id="versionsLine"></div>
+      <div class="ver"><div class="v">v1.0</div><div class="d">Jun 2024 — Oct 2024</div><div class="t">Trainee UI/UX Designer</div><div class="s">Live product projects from week one. Research, feedback analysis, wireframes and UI under senior designers.</div></div>
+      <div class="ver"><div class="v">v2.0</div><div class="d">Nov 2024 — Mar 2025</div><div class="t">Associate UI/UX Designer</div><div class="s">Owned flows and prototypes across web and mobile; research, competitive analysis and usability testing to back decisions.</div></div>
+      <div class="ver"><div class="v">v3.0</div><div class="d">Apr 2025 — Mar 2026</div><div class="t">Executive UI/UX Designer</div><div class="s">Led the complete lifecycle of an enterprise product from concept to launch — research through IA, UI, prototyping and testing.</div></div>
+      <div class="ver"><div class="v">v4.0</div><div class="d">Apr 2026 — present</div><div class="t">Team Lead – UI/UX Designer</div><div class="s">Leading the design function across HRMS, ERP and Manufacturing ERP. Design system governance, reviews, AI-assisted workflows, stakeholder alignment.</div></div>
+      <div class="ver ver--next"><div class="v">next</div><div class="d">Open to it</div><div class="t">Senior product design</div><div class="s">A team with a hard product problem and the appetite to solve it properly.</div></div>
+    </div>
+    <div class="journey__note">
+      <div><b>Before that</b></div>
+      <div>B.E. Electronics and Instrumentation Engineering, Sri Sairam Engineering College, 2018–2022. User Experience Design certification, UXmint Design Institute, 2023. The engineering background is why systems, states and tolerances feel natural — an interface is instrumentation for a process.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 08 · ABOUT ═══════════════ -->
+<section class="section about" id="about" data-theme="dark" data-chapter="12" data-name="About">
+  <div class="wrap about__grid">
+    <h2 class="about__stmt">I started by drawing screens. <span class="dim">I stayed for the systems underneath them.</span></h2>
+    <div class="about__text">
+      <p><strong>I'm Dennis Joel Raj, a product designer in Chennai.</strong> For the last two years I've been the primary UI/UX designer at a startup building enterprise HRMS and ERP software — the kind of products where a wrong default in a leave policy screen turns into a payroll error a month later.</p>
+      <p>Working as the sole designer meant owning everything: discovery with stakeholders, information architecture, the design system, high-fidelity UI for web and mobile, prototypes, usability testing and handoff. It also meant handling several products at once and learning to make decisions that hold across all of them.</p>
+      <p>I now lead the design function. Most of my time goes to design direction, reviews and building the component library that lets the team move faster without drifting. I use Claude and Figma AI daily to explore more directions earlier — the judgement about which direction is right is still the job.</p>
+      <div class="about__list">
+        <div>Primary designer on HRMS, ERP and Manufacturing ERP <span>ownership</span></div>
+        <div>Sole designer in a startup, several products in parallel <span>scope</span></div>
+        <div>Design system governance across web and mobile <span>systems</span></div>
+        <div>Product managers, developers and business stakeholders <span>collaboration</span></div>
+        <div>Two live client products delivered independently <span>freelance</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 09 · CAPABILITIES ═══════════════ -->
+<section class="section caps" id="capabilities" data-theme="dark" data-chapter="13" data-name="Capabilities">
+  <div class="wrap">
+    <div class="chapter-num">Capabilities</div>
+    <h2 class="h-m" style="margin-top:14px;max-width:22ch">Grouped by what they let me do, not by percentage.</h2>
+    <div class="caps__grid">
+      <div class="cap"><h4>Product thinking <i></i></h4><ul><li>Enterprise UX</li><li>Workflow design</li><li>Information architecture</li><li>Role-based experiences</li><li>UX strategy</li></ul><p>Start from the business rule, end at the screen.</p></div>
+      <div class="cap"><h4>Craft <i></i></h4><ul><li>Interface design</li><li>Interaction design</li><li>Prototyping</li><li>Responsive design</li><li>Dashboard and data-dense UI</li></ul><p>Detail is where enterprise products win or lose trust.</p></div>
+      <div class="cap"><h4>Systems <i></i></h4><ul><li>Design systems</li><li>Component architecture</li><li>Scalable UI patterns</li><li>Tokens and density modes</li><li>Design-to-development handoff</li></ul><p>Decide once, apply everywhere.</p></div>
+      <div class="cap"><h4>Leadership <i></i></h4><ul><li>Design ownership</li><li>Design reviews</li><li>Stakeholder collaboration</li><li>Cross-functional communication</li><li>Team guidance</li></ul><p>Clarity for the team is a design deliverable too.</p></div>
+      <div class="cap"><h4>Tools <i></i></h4><ul><li>Figma, Figma AI, FigJam</li><li>Claude, Claude Design</li><li>Figma Make</li><li>Miro</li><li>ChatGPT</li></ul><p>AI for breadth of exploration; judgement for depth.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 10 · SCALE ═══════════════ -->
+<section class="section scale" id="scale" data-theme="dark" data-chapter="14" data-name="Scale">
+  <div class="wrap">
+    <div class="scale__grid">
+      <div class="stat"><div class="v"><span data-count="2">0</span><small>+ yrs</small></div><div class="l">Designing enterprise software</div><div class="s">All of it workflow-heavy, all of it shipped.</div></div>
+      <div class="stat"><div class="v"><span data-count="3">0</span><small>platforms</small></div><div class="l">HRMS, ERP, Manufacturing ERP</div><div class="s">Plus two independent client products.</div></div>
+      <div class="stat"><div class="v"><span data-count="19">0</span><small>modules</small></div><div class="l">Designed across the platforms</div><div class="s">Listed below. Each with its own roles, states and rules.</div></div>
+      <div class="stat"><div class="v"><span data-count="3">0</span><small>promotions</small></div><div class="l">In twenty-two months</div><div class="s">Trainee to Team Lead at the same company.</div></div>
+    </div>
+    <div class="scale__modules" aria-label="Modules designed">
+      <span data-dom="hrms">Employee lifecycle</span><span data-dom="hrms">Attendance</span><span data-dom="hrms">Leave</span><span data-dom="hrms">Payroll</span><span data-dom="hrms">Timesheets</span><span data-dom="hrms">Recruitment</span><span data-dom="hrms">Onboarding</span><span data-dom="hrms">Offer management</span><span data-dom="hrms">Probation</span><span data-dom="hrms">Reimbursement</span><span data-dom="hrms">Compliance</span><span data-dom="hrms">Approval systems</span>
+      <span data-dom="erp">Inventory</span><span data-dom="erp">Purchase</span><span data-dom="erp">Sales</span><span data-dom="erp">Manufacturing</span><span data-dom="erp">Quality control</span><span data-dom="erp">Order management</span><span data-dom="erp">Service management</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 11 · CONTACT ═══════════════ -->
+<section class="section contact" id="contact" data-theme="dark" data-chapter="15" data-name="Contact">
+  <div class="contact__radial" aria-hidden="true"></div>
+  <div class="wrap contact__grid">
+    <div>
+      <h2 class="contact__stmt">Have a difficult product problem? <span class="dim">That's usually where I do my best work.</span></h2>
+      <div class="contact__cta"><a class="cta" id="cta" href="mailto:dennisjoelraj@gmail.com?subject=A%20product%20problem%20worth%20designing" data-magnetic>Let's build something clearer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    </div>
+    <div class="contact__links">
+      <a href="mailto:dennisjoelraj@gmail.com"><span>Email</span>dennisjoelraj@gmail.com<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <a href="https://www.linkedin.com/in/dennisjoel" target="_blank" rel="noopener"><span>LinkedIn</span>linkedin.com/in/dennisjoel<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <a href="https://www.behance.net/dennisjoel26" target="_blank" rel="noopener"><span>Behance</span>behance.net/dennisjoel26<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <div><span>Resume</span><div class="resume"><a class="link" href="Dennis_Joel_Raj_Resume.pdf" target="_blank" rel="noopener">View</a><a class="link" href="Dennis_Joel_Raj_Resume.pdf" download>Download</a></div><span>PDF</span></div>
+    </div>
+  </div>
+  <div class="wrap foot">
+    <div>Dennis Joel Raj D · Chennai, India · Designed and written by me. Built with Inter and GSAP.</div>
+    <div class="keys">Try <kbd>G</kbd> grid · <kbd>D</kbd> theme · <kbd>I</kbd> inspect · type <kbd>/work</kbd> <kbd>/about</kbd> <kbd>/contact</kbd></div>
+  </div>
+</section>
+</main>
+
+<!-- case study overlay -->
+<div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="caseTitle" tabindex="-1">
+  <div class="case__inner">
+    <div class="case__head"><div class="small" id="caseCrumb"></div><button class="case__close" id="caseClose">Close <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></i></button></div>
+    <div class="case__hero"><div><div class="chapter-num" id="caseKicker"></div><h2 id="caseTitle" style="margin-top:14px"></h2></div><div class="case__facts" id="caseFacts"></div></div>
+    <div class="case__chapters" id="caseChapters"></div>
+    <div class="case__next"><div class="small">Next case</div><button class="project__cta" id="caseNext">Next <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+'use strict';
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.defaults({ refreshPriority: -1 });
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const html = document.documentElement;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const touch = matchMedia('(hover: none), (pointer: coarse)').matches;
+const isMobile = () => innerWidth <= 768;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+
+/* ───────────── loader ───────────── */
+const loader = $('#loader');
+let seen = false; try { seen = sessionStorage.getItem('djr') === '1'; } catch (e) {}
+function finishLoad() {
+  html.classList.add('loaded'); try { sessionStorage.setItem('djr', '1'); } catch (e) {}
+  startHero(); ScrollTrigger.refresh();
+}
+if (seen || reduced) { finishLoad(); }
+else {
+  const rows = $$('.loader__row');
+  const tl = gsap.timeline({ onComplete: () => { gsap.to(loader, { yPercent: -100, duration: .7, ease: 'power4.inOut', onComplete: finishLoad }); } });
+  rows.forEach((r, i) => tl.add(() => r.classList.add('on'), i * .22));
+  tl.to('#loaderBar', { scaleX: 1, duration: 1.1, ease: 'power2.inOut' }, 0).to({}, { duration: .2 });
+}
+
+/* ───────────── cursor ───────────── */
+const cursor = $('#cursor'), cLabel = $('#cursorLabel');
+const pointer = { x: innerWidth / 2, y: innerHeight / 2, active: false };
+if (!touch && !reduced) {
+  document.body.classList.add('no-cursor');
+  const qx = gsap.quickTo(cursor, 'x', { duration: .12, ease: 'power3' }), qy = gsap.quickTo(cursor, 'y', { duration: .12, ease: 'power3' });
+  addEventListener('mousemove', e => { pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true; qx(e.clientX); qy(e.clientY); cursor.classList.remove('is-hidden'); });
+  document.addEventListener('mouseleave', () => cursor.classList.add('is-hidden'));
+  document.addEventListener('mouseover', e => {
+    const lab = e.target.closest('[data-cursor]');
+    if (lab) { cLabel.textContent = lab.dataset.cursor; cursor.classList.add('is-label'); cursor.classList.remove('is-link'); return; }
+    cursor.classList.remove('is-label');
+    cursor.classList.toggle('is-link', !!e.target.closest('a,button,[role=tab]'));
+  });
+}
+addEventListener('mousemove', e => { pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true; }, { passive: true });
+
+/* ───────────── theme, rail, nav, progress ───────────── */
+const sections = $$('[data-chapter]');
+let manualTheme = null;
+const railChapter = $('#railChapter'), railName = $('#railName'), navPos = $('#navPos'), navPill = $('#navPill');
+const navLinks = $$('.nav a'); const navMap = { intro: 'intro', think: 'intro', complexity: 'intro', work: 'work', system: 'work', more: 'work', process: 'work', journey: 'journey', about: 'about', capabilities: 'about', scale: 'about', contact: 'contact' };
+function setTheme(t) { html.dataset.theme = manualTheme || t; }
+function setNav(id) {
+  const key = navMap[id] || (id ? 'work' : 'intro');
+  navLinks.forEach(a => a.classList.toggle('active', a.dataset.nav === key));
+  const a = navLinks.find(a => a.dataset.nav === key); if (a) { navPill.style.left = a.offsetLeft + 'px'; navPill.style.width = a.offsetWidth + 'px'; }
+}
+sections.forEach(s => {
+  ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 55%',
+    onToggle: self => { if (!self.isActive) return; setTheme(s.dataset.theme);
+      railChapter.textContent = s.dataset.chapter; railName.textContent = s.dataset.name; navPos.textContent = s.dataset.chapter + ' / 15'; setNav(s.id || s.dataset.case); } });
+});
+ScrollTrigger.create({ start: 0, end: 'max', onUpdate: self => { gsap.set('#progressFill', { scaleY: self.progress }); $('#railCoords').textContent = 'y ' + String(Math.round(scrollY)).padStart(4, '0'); } });
+let lastY = 0; addEventListener('scroll', () => { const y = scrollY; $('#nav').classList.toggle('compact', y > 200); lastY = y; }, { passive: true });
+addEventListener('load', () => setNav('intro')); addEventListener('resize', () => setNav(document.querySelector('.nav a.active')?.dataset.nav || 'intro'));
+
+/* ───────────── hero: chaos → system → clarity ───────────── */
+const hero = $('#intro'), stage = $('#heroStage'), frags = $$('.frag');
+const heroState = { order: 0, intro: 0, scroll: 0, t: 0 };
+const fragData = frags.map(f => ({ el: f, cx: 42 + rnd() * 54, cy: 4 + rnd() * 86, mcx: 30 + rnd() * 55, mcy: 68 + rnd() * 24, rot: (rnd() - .5) * 50, sc: .8 + rnd() * .3, tx: 46 + (+f.dataset.tx) * .52, ty: 6 + (+f.dataset.ty) * .84, mtx: +f.dataset.mtx || 50, mty: +f.dataset.mty || 80, px: 0, py: 0, ph: rnd() * 6.28, x: 0, y: 0, r: 0, s: 1 }));
+function renderFrags() {
+  const w = stage.clientWidth, h = stage.clientHeight, o = heroState.order = Math.max(heroState.intro, heroState.scroll);
+  const e = o < .5 ? 2 * o * o : 1 - Math.pow(-2 * o + 2, 2) / 2; heroState.t += .016;
+  const mob = isMobile();
+  fragData.forEach((d, i) => {
+    const tx = mob ? d.mtx : d.tx, ty = mob ? d.mty : d.ty;
+    let x = lerp(mob ? d.mcx : d.cx, tx, e) / 100 * w, y = lerp(mob ? d.mcy : d.cy, ty, e) / 100 * h;
+    x += Math.sin(heroState.t * .8 + d.ph) * 10 * (1 - e); y += Math.cos(heroState.t * .6 + d.ph) * 10 * (1 - e);
+    if (pointer.active && !touch) { const r = stage.getBoundingClientRect(); const dx = x - (pointer.x - r.left), dy = y - (pointer.y - r.top); const dist = Math.hypot(dx, dy) || 1; const push = clamp((300 - dist) / 300, 0, 1) * 60 * (1 - e * .85); x += dx / dist * push; y += dy / dist * push; }
+    d.x = lerp(d.x, x, .08); d.y = lerp(d.y, y, .08); d.r = lerp(d.r, d.rot * (1 - e), .08); d.s = lerp(d.s, lerp(d.sc, 1, e), .08);
+    d.el.style.transform = `translate(${d.x}px,${d.y}px) translate(-50%,-50%) rotate(${d.r}deg) scale(${d.s})`;
+  });
+  $('#heroOrder').textContent = 'order ' + o.toFixed(2);
+  $('#lg0').classList.toggle('on', o < .33); $('#lg1').classList.toggle('on', o >= .33 && o < .8); $('#lg2').classList.toggle('on', o >= .8);
+}
+const words = ['systems.', 'workflows.', 'approvals.', 'interactions.', 'clarity.'];
+function startHero() {
+  hero.classList.add('ordered');
+  if (reduced) { heroState.intro = 1; $('#typedWord').textContent = 'clarity.'; $('.caret').remove(); gsap.set('#heroId', { opacity: 1, y: 0 }); renderFrags(); return; }
+  fragData.forEach(d => { d.x = d.cx / 100 * stage.clientWidth; d.y = d.cy / 100 * stage.clientHeight; });
+  gsap.ticker.add(renderFrags);
+  const tw = $('#typedWord'); const tl = gsap.timeline();
+  words.forEach((w, i) => { if (i === 0) return; tl.to(tw, { opacity: 0, y: -10, duration: .25, ease: 'power2.in', delay: i === 1 ? .8 : .45 }).add(() => tw.textContent = w).to(tw, { opacity: 1, y: 0, duration: .35, ease: 'power3.out' }); });
+  tl.add(() => $('.caret').style.display = 'none', '+=.3').to('#heroId', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=.1');
+  tl.to(heroState, { intro: .34, duration: 2.4, ease: 'power2.inOut' }, 1.2);
+}
+if (!reduced) ScrollTrigger.create({ trigger: hero, start: 'top top', end: '+=90%', pin: true, pinSpacing: true, scrub: .4, refreshPriority: 3, onUpdate: s => { heroState.scroll = .34 + s.progress * .66; gsap.set('.hero__body', { opacity: 1 - Math.min(1, s.progress * 1.6), y: -50 * s.progress }); } });
+$('#cx') && addEventListener('mousemove', e => { $('#cx').textContent = String(e.clientX).padStart(4, '0'); $('#cy').textContent = String(e.clientY).padStart(4, '0'); }, { passive: true });
+
+/* ───────────── reveals ───────────── */
+$$('.reveal-lines, .fade, [data-stmt]').forEach(el => ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => el.classList.add('in') }));
+if (reduced) $$('.reveal-lines, .fade, [data-stmt]').forEach(el => el.classList.add('in'));
+
+/* ───────────── complexity map ───────────── */
+(() => {
+  const svg = $('#cmap'); const NS = 'http://www.w3.org/2000/svg';
+  const lanes = [
+    { role: 'Employee', x: 150, items: ['Attendance', 'Leave', 'Payroll', 'Compliance'] },
+    { role: 'Manager', x: 450, items: ['Approval', 'Reports', 'Recruitment', 'Sales', 'Dispatch'] },
+    { role: 'Admin', x: 750, items: ['HR', 'Inventory', 'Purchase', 'Manufacturing', 'QC'] }];
+  const nodes = []; seed = 21; const mob = innerWidth <= 768, FS = mob ? 22 : 12, NH = mob ? 56 : 32, GAP = mob ? 90 : 78;
+  lanes.forEach((L, li) => {
+    nodes.push({ n: L.role, role: true, ox: L.x, oy: 120, lane: li });
+    L.items.forEach((it, i) => nodes.push({ n: it, ox: L.x, oy: 200 + i * GAP, lane: li }));
+  });
+  nodes.forEach(n => { n.cx = 90 + rnd() * 720; n.cy = 60 + rnd() * 520; n.x = n.cx; n.y = n.cy; n.w = n.n.length * (FS * .62) + (mob ? 44 : 28); });
+  const edges = [];
+  nodes.forEach((n, i) => { if (!n.role) { const r = nodes.find(m => m.role && m.lane === n.lane); edges.push({ a: nodes.indexOf(r), b: i, keep: true }); } });
+  for (let k = 0; k < 34; k++) { const a = Math.floor(rnd() * nodes.length), b = Math.floor(rnd() * nodes.length); if (a !== b && nodes[a].lane !== nodes[b].lane) edges.push({ a, b, keep: false }); }
+  const gE = document.createElementNS(NS, 'g'), gL = document.createElementNS(NS, 'g'), gN = document.createElementNS(NS, 'g'); svg.append(gL, gE, gN);
+  lanes.forEach(L => { const r = document.createElementNS(NS, 'rect'); r.setAttribute('class', 'lane'); r.setAttribute('x', L.x - 105); r.setAttribute('y', 80); r.setAttribute('width', 210); r.setAttribute('height', mob ? 530 : 470); r.setAttribute('rx', 12); gL.append(r);
+    const t = document.createElementNS(NS, 'text'); t.setAttribute('class', 'lane-t'); t.setAttribute('x', L.x - 95); t.setAttribute('y', 68); t.setAttribute('font-size', mob ? 20 : 11); t.textContent = L.role + ' sees'; gL.append(t); L.rect = r; L.text = t; });
+  edges.forEach(e => { const p = document.createElementNS(NS, 'path'); p.setAttribute('class', 'edge' + (e.keep ? ' keep' : '')); gE.append(p); e.el = p; });
+  nodes.forEach(n => { const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'node' + (n.role ? ' role' : '')); const r = document.createElementNS(NS, 'rect'); r.setAttribute('width', n.w); r.setAttribute('height', NH); r.setAttribute('x', -n.w / 2); r.setAttribute('y', -NH / 2); const t = document.createElementNS(NS, 'text'); t.setAttribute('text-anchor', 'middle'); t.setAttribute('y', FS * .36); t.setAttribute('font-size', FS); t.textContent = n.n; g.append(r, t); gN.append(g); n.el = g; });
+  const title = $('#cmapTitle'), text = $('#cmapText'), bars = $$('#cmapState i');
+  const copy = [
+    ['Seventeen modules. Every one of them talks to the others.', 'This is what an HRMS or ERP looks like on day one: payroll depends on attendance, attendance depends on leave, leave waits on approval, and everything reports upward.'],
+    ['Same system. Three ways of seeing it.', 'The complexity doesn\'t go away. It gets assigned. An employee sees their own attendance and leave; a manager sees approvals and reports; an admin sees the machinery.'],
+    ['Great enterprise UX isn\'t about removing complexity. It\'s about deciding who needs to see it.', 'Every screen I design starts with that question — and most of the design work is answering it honestly for each role.']];
+  let phase = -1;
+  function render(p) {
+    const e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    nodes.forEach(n => { n.x = lerp(n.cx, n.ox, e); n.y = lerp(n.cy, n.oy, e); n.el.setAttribute('transform', `translate(${n.x},${n.y})`); });
+    edges.forEach(ed => { const a = nodes[ed.a], b = nodes[ed.b]; const mx = (a.x + b.x) / 2 + (ed.keep ? 0 : (1 - e) * 40); ed.el.setAttribute('d', `M${a.x},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.x},${b.y}`); ed.el.style.opacity = ed.keep ? .35 + e * .55 : .35 * (1 - clamp(p * 1.6, 0, 1)); });
+    const lo = clamp((p - .55) / .3, 0, 1); lanes.forEach(L => { L.rect.style.opacity = lo; L.text.style.opacity = lo; });
+    bars[0].style.setProperty('--p', clamp(p / .5, 0, 1)); bars[1].style.setProperty('--p', clamp((p - .5) / .5, 0, 1));
+    const ph = p < .3 ? 0 : p < .72 ? 1 : 2;
+    if (ph !== phase) { phase = ph; gsap.fromTo([title, text], { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .5, stagger: .05, overwrite: true }); title.textContent = copy[ph][0]; text.textContent = copy[ph][1]; }
+  }
+  if (reduced) { render(1); return; }
+  render(0);
+  ScrollTrigger.create({ trigger: '#complexityPin', start: 'top top', end: '+=170%', pin: true, scrub: .5, refreshPriority: 2, onUpdate: s => render(s.progress) });
+})();
+
+/* ───────────── project screens tilt ───────────── */
+if (!touch && !reduced) $$('[data-tilt]').forEach(sc => {
+  const box = sc.parentElement;
+  box.addEventListener('mousemove', e => { const r = box.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; gsap.to(sc, { rotateY: x * 6, rotateX: -y * 6, duration: .6, ease: 'power3.out' }); });
+  box.addEventListener('mouseleave', () => gsap.to(sc, { rotateY: 0, rotateX: 0, duration: .8, ease: 'power3.out' }));
+});
+if (!reduced) $$('.project').forEach(p => { gsap.fromTo(p.querySelector('.screen'), { y: 60, rotateX: 8 }, { y: -30, rotateX: 0, ease: 'none', scrollTrigger: { trigger: p, start: 'top bottom', end: 'bottom top', scrub: true } }); });
+
+/* ───────────── design system assembly ───────────── */
+(() => {
+  const parts = $$('#dash .part'); const dash = $('#dash'); seed = 5;
+  const off = parts.map(() => ({ x: (rnd() - .5) * 420, y: (rnd() - .5) * 340, r: (rnd() - .5) * 40 }));
+  if (reduced) { dash.classList.remove('exploded'); gsap.set('.p-modal', { opacity: 1 }); return; }
+  parts.forEach((p, i) => gsap.set(p, { x: off[i].x, y: off[i].y, rotate: off[i].r }));
+  const tl = gsap.timeline({ paused: true });
+  parts.forEach((p, i) => { if (p.classList.contains('p-modal')) return; tl.to(p, { x: 0, y: 0, rotate: 0, ease: 'power2.inOut', duration: 1 }, i * .07); });
+  tl.to('.p-modal', { x: 0, y: 0, rotate: 0, opacity: 1, duration: .5, ease: 'power2.out' }, '>-.1');
+  ScrollTrigger.create({ trigger: '#systemPin', start: 'top top', end: '+=130%', pin: true, scrub: .6, refreshPriority: 1, animation: tl,
+    onUpdate: s => { dash.classList.toggle('exploded', s.progress < .55); $('#systemHint').textContent = s.progress < .55 ? 'Scroll to assemble the dashboard.' : s.progress < .9 ? 'Parts snapping to the 12-column grid.' : 'One dashboard. Every part reusable.'; } });
+})();
+
+/* ───────────── drag strip ───────────── */
+(() => {
+  const strip = $('#strip'); let x = 0, startX = 0, startPos = 0, down = false, vel = 0, lastX = 0;
+  const max = () => Math.max(0, strip.scrollWidth - innerWidth);
+  const set = () => { x = clamp(x, -max(), 0); strip.style.transform = `translate3d(${x}px,0,0)`; };
+  strip.addEventListener('pointerdown', e => { down = true; startX = e.clientX; startPos = x; lastX = e.clientX; strip.classList.add('dragging'); strip.setPointerCapture(e.pointerId); vel = 0; });
+  strip.addEventListener('pointermove', e => { if (!down) return; vel = e.clientX - lastX; lastX = e.clientX; x = startPos + (e.clientX - startX); set(); });
+  const up = () => { if (!down) return; down = false; strip.classList.remove('dragging'); const tick = () => { vel *= .93; x += vel; set(); if (Math.abs(vel) > .3) requestAnimationFrame(tick); }; requestAnimationFrame(tick); };
+  strip.addEventListener('pointerup', up); strip.addEventListener('pointercancel', up);
+  strip.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); x -= e.deltaX; set(); } }, { passive: false });
+  if (!reduced) gsap.fromTo(strip, { x: 120 }, { x: 0, ease: 'none', scrollTrigger: { trigger: '#more', start: 'top bottom', end: 'top 30%', scrub: true }, onUpdate() { if (!down) x = gsap.getProperty(strip, 'x'); } });
+})();
+
+/* ───────────── process ───────────── */
+(() => {
+  const steps = [
+    ['Understand', 'Before any screen: the users, the business rules and the product constraints. What does the leave policy actually say? What does the payroll engine need on the 25th?', ['Stakeholder discovery with PMs and business owners', 'Rule and policy inventory', 'Constraint list: data, platform, timeline']],
+    ['Map', 'Break the complexity into roles, workflows and states. Who initiates, who approves, who only needs to be told — and what happens when someone is on leave.', ['Role matrix per module', 'Workflow maps with every branch', 'State inventory: draft, pending, approved, rejected, expired']],
+    ['Structure', 'Information architecture and interaction hierarchy. Which action is primary on this screen, for this role, at this state — and which ones should be a click further away.', ['Navigation and module IA', 'Primary / secondary action rules', 'Table and detail-view hierarchy']],
+    ['Design', 'Scalable interface systems. Components first, screens as compositions, with Claude and Figma AI used to try more directions early before committing to one.', ['Component library and tokens', 'High-fidelity web and mobile UI', 'Prototypes for the real flow, not the demo flow']],
+    ['Validate', 'Usability testing on the flows that break: month-end payroll, a rejected reimbursement, a partial goods receipt. Edge cases and error states get designed, not discovered.', ['Task-based usability sessions', 'Edge-case and error-state review', 'Refinement before handoff']],
+    ['Evolve', 'Requirements grow after launch. The system is built so the next module inherits the decisions of the last one instead of reopening them.', ['Design reviews across releases', 'Pattern updates propagated through the library', 'Feedback loops with developers and users']]];
+  const items = $$('.process__item'), text = $('#processText'), points = $('#processPoints'), viz = $('#processViz'); const NS = 'http://www.w3.org/2000/svg';
+  const N = steps.map((s, i) => { const g = document.createElementNS(NS, 'g'); const x = 44 + i * 86; const c = document.createElementNS(NS, 'rect'); c.setAttribute('class', 'n'); c.setAttribute('x', x - 34); c.setAttribute('y', 40); c.setAttribute('width', 68); c.setAttribute('height', 32); c.setAttribute('rx', 6); const t = document.createElementNS(NS, 'text'); t.setAttribute('x', x); t.setAttribute('y', 60); t.setAttribute('text-anchor', 'middle'); t.textContent = s[0]; g.append(c, t); if (i < 5) { const e = document.createElementNS(NS, 'path'); e.setAttribute('class', 'e'); e.setAttribute('d', `M${x + 34},56 L${x + 52},56`); viz.append(e); g.edge = e; } viz.append(g); return { c, edge: g.edge }; });
+  function go(i) {
+    items.forEach((it, k) => { it.classList.toggle('active', k === i); it.setAttribute('aria-selected', k === i); });
+    N.forEach((n, k) => { n.c.classList.toggle('on', k <= i); if (n.edge) n.edge.classList.toggle('on', k < i); });
+    gsap.fromTo([text, points], { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: .45, stagger: .06, overwrite: true });
+    text.textContent = steps[i][1]; points.innerHTML = steps[i][2].map(p => `<li>${p}</li>`).join('');
+  }
+  items.forEach(it => { it.addEventListener('click', () => go(+it.dataset.step)); if (!touch) it.addEventListener('mouseenter', () => go(+it.dataset.step)); });
+  go(0);
+})();
+
+/* ───────────── journey ───────────── */
+(() => {
+  const vers = $$('.ver'); const line = $('#versionsLine');
+  if (reduced) { gsap.set(line, { scaleX: 1, scaleY: 1 }); vers.forEach(v => v.classList.add('lit')); return; }
+  ScrollTrigger.create({ trigger: '#versions', start: 'top 75%', end: 'bottom 45%', scrub: .5, onUpdate: s => { const p = s.progress; gsap.set(line, innerWidth <= 1024 ? { scaleY: p } : { scaleX: p }); vers.forEach((v, i) => v.classList.toggle('lit', p >= i / (vers.length - 1) - .02)); } });
+})();
+
+/* ───────────── counters ───────────── */
+$$('[data-count]').forEach(el => { const n = +el.dataset.count; if (reduced) { el.textContent = n; return; }
+  ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => gsap.fromTo({ v: 0 }, { v: 0 }, { v: n, duration: 1.4, ease: 'power3.out', onUpdate() { el.textContent = Math.round(this.targets()[0].v); } }) }); });
+
+/* ───────────── magnetic ───────────── */
+if (!touch && !reduced) $$('[data-magnetic], .project__cta, .btn').forEach(el => {
+  el.addEventListener('mousemove', e => { const r = el.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); gsap.to(el, { x: dx * .18, y: dy * .25, duration: .5, ease: 'power3.out' }); el.style.setProperty('--ox', ((e.clientX - r.left) / r.width * 100) + '%'); el.style.setProperty('--oy', ((e.clientY - r.top) / r.height * 100) + '%'); });
+  el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: .7, ease: 'elastic.out(1,.5)' }));
+});
+
+/* ───────────── case studies ───────────── */
+const CASES = {
+  hrms: { accent: 'var(--hrms)', kicker: 'Enterprise HRMS · Web and mobile · Ardens Business Solutions', title: 'One workforce, three ways of seeing it.',
+    facts: [['Role', 'Primary UI/UX designer, later Team Lead'], ['Platforms', 'Responsive web app, mobile app'], ['Roles designed for', 'Employee, manager, HR, admin'], ['Modules', 'Attendance, leave, payroll, timesheets, recruitment, onboarding, compliance, approvals']],
+    chapters: [
+      ['Context', 'What was happening?', `<p>ABShrms builds HRMS software for organisations that run on rules: shift timings, leave policies, statutory deductions, probation periods, multi-level approvals. The product had to serve everyone in the company at once, from an employee checking a payslip on their phone to an admin configuring a payroll cycle.</p><p>I joined as the primary designer and progressively took ownership of the whole product experience — <strong>information architecture, the design system, every module's flows, and both platforms.</strong></p>`],
+      ['Complexity', 'Why was this hard?', `<p>Nothing in an HRMS is independent. A late punch-in changes attendance, attendance changes payable days, payable days change payroll, and a pending leave approval sits in the middle of all of it. Each of those steps has a different owner.</p><ul><li>The same data means different things to different roles</li><li>Exceptions are the norm: half-days, comp-offs, regularisation requests, retroactive corrections</li><li>Month-end is a deadline, not a suggestion — the UI has to survive pressure</li><li>Everything must work on a phone for people who never sit at a desk</li></ul>`],
+      ['System', 'How did the product work?', `<p>The first decision was to design by <strong>role, not by module</strong>. Every module was mapped against who initiates, who approves and who is informed, and the navigation, dashboards and notifications were built from that matrix.</p><div class="ch__vis"><div class="ia"><div><b>Employee</b><span>My attendance</span><span>Apply leave</span><span>Timesheet</span><span>Payslips</span><span>My documents</span></div><div><b>Manager</b><span>Team attendance</span><span>Approvals queue</span><span>Team timesheets</span><span>Recruitment requests</span><span>Reports</span></div><div><b>HR / Admin</b><span>Employee lifecycle</span><span>Policy configuration</span><span>Payroll run</span><span>Onboarding</span><span>Compliance</span></div></div></div><p>A single approval engine underneath meant leave, reimbursements, timesheets and offers all shared one interaction pattern: request, evidence, approver chain, status, audit trail.</p>`],
+      ['Decisions', 'What design decisions did I make?', `<div class="ch__vis"><div class="ba"><div><b>Before</b>Every module had its own list screen, its own status colours and its own approval dialog. Managers learnt four ways to approve something.</div><div><b>After</b>One approvals queue across modules, one status vocabulary (draft · pending · approved · rejected), one approval sheet with the evidence the approver actually needs.</div></div></div><ul><li><strong>Status is a component, not a colour.</strong> Chips carry state, owner and next step, so a table row can be read without opening it.</li><li><strong>Data-dense tables get a density toggle</strong> — HR works in compact mode all day; managers scan in comfortable mode.</li><li><strong>Regularisation requests explain the rule they're breaking</strong>, so rejections don't need a conversation.</li><li><strong>Mobile got its own flows</strong>, not shrunken web screens: punch-in, leave, approvals and payslips as one-thumb tasks, on shared tokens.</li></ul>`],
+      ['Experience', 'How did the solution behave?', `<div class="ch__vis"><div class="flow"><span>Employee applies leave</span><em>→</em><span class="d">Policy check runs inline</span><em>→</em><span>Manager sees it in one queue</span><em>→</em><span class="d">Approve with balance shown</span><em>→</em><span>Attendance updates</span><em>→</em><span>Payroll picks it up</span></div></div><p>The behaviour that mattered most was <strong>state visibility</strong>: at every step, each role can see where a request is, who it's waiting on, and what happens next. Error states name the rule, empty states name the action.</p>`],
+      ['Outcome', 'What changed?', `<p>The HRMS shipped as a coherent product across web and mobile with a single component library behind it. The role matrix and approval pattern became the foundation the ERP was built on, and the design system I established is now the standard I govern as Team Lead.</p><p class="small">Client metrics aren't shared publicly; happy to walk through specifics in a conversation.</p>`]] },
+  erp: { accent: 'var(--erp)', kicker: 'ERP and Manufacturing ERP · Web · Ardens Business Solutions', title: 'From purchase order to dispatch, without losing the thread.',
+    facts: [['Role', 'Primary UI/UX designer'], ['Platforms', 'Responsive web, enterprise dashboards'], ['Roles designed for', 'Stores, purchase, production, QC, sales, management'], ['Modules', 'Inventory, purchase, sales, manufacturing, quality control, order management, dashboards']],
+    chapters: [
+      ['Context', 'What was happening?', `<p>The company extended its platform from HR into operations: an ERP for trading businesses and a Manufacturing ERP for factories. The users changed completely — storekeepers, purchase officers, production supervisors and QC inspectors, many of them working from a shared terminal on the shop floor.</p><p>I owned the design end to end, reusing the HRMS design system where it fit and extending it where operations needed more.</p>`],
+      ['Complexity', 'Why was this hard?', `<p>Manufacturing is a chain of dependent documents. An indent becomes a purchase order, which becomes a goods receipt, which changes inventory, which feeds a production order, which produces stock that QC has to release before sales can dispatch it. Break the chain anywhere and the numbers stop matching.</p><ul><li>Every screen is data-dense: quantities, units, batches, rates, variances</li><li>Partial states everywhere — partial receipts, partial QC passes, partial dispatches</li><li>Approvals with real money attached, so variances must be visible before signing</li><li>Management wants dashboards; operators want the next row</li></ul>`],
+      ['System', 'How did the product work?', `<p>I designed the product around <strong>the document chain as a visible object</strong>. Every transaction shows its ancestors and descendants, so a storekeeper can trace a batch back to its PO and a manager can see why an order hasn't shipped.</p><div class="ch__vis"><div class="flow"><span>Indent</span><em>→</em><span>Purchase order</span><em>→</em><span class="d">Goods receipt</span><em>→</em><span>Inventory</span><em>→</em><span>Production order</span><em>→</em><span class="d">QC inspection</span><em>→</em><span>Sales order</span><em>→</em><span>Dispatch</span></div></div><p>Module IA followed the chain, and the dashboards were built from the same status vocabulary as the transactions, so a KPI could always be clicked back to the rows behind it.</p>`],
+      ['Decisions', 'What design decisions did I make?', `<div class="ch__vis"><div class="ba"><div><b>Before</b>Tables showed everything at once. Variances were buried in columns, and partial states looked identical to complete ones.</div><div><b>After</b>Tables lead with state and exception: a partial receipt is visually distinct, a price variance is surfaced at the approval step, and columns are grouped by what the role acts on.</div></div></div><ul><li><strong>Compact density by default</strong> for operations screens, with sticky headers and frozen key columns for long lists.</li><li><strong>A shared "document header" component</strong> — status, links up and down the chain, and the primary action — on every transaction.</li><li><strong>QC as a gate, not a module.</strong> Hold and release states appear inside inventory and dispatch, where the consequence is felt.</li><li><strong>Dashboards built from the HRMS card and chart components</strong>, extended with drill-down.</li></ul>`],
+      ['Experience', 'How did the solution behave?', `<p>An approver opening a purchase order sees the quantity and rate variance against the indent before the approve button. A supervisor closing a production order sees exactly what QC still holds. Nothing in the chain can be completed while something upstream is undone, and the interface says which thing.</p><p><strong>Edge cases were designed as first-class screens</strong>: over-receipt, rejected batches, cancelled orders with partial dispatch.</p>`],
+      ['Outcome', 'What changed?', `<p>The ERP and Manufacturing ERP shipped on the same design foundation as the HRMS, which is what made it possible for one designer to own three products. The document-chain header and exception-first tables became reusable patterns across all operations modules.</p><p class="small">Client metrics aren't shared publicly; specifics available in a conversation.</p>`]] },
+  clarks: { accent: 'var(--clarks)', kicker: 'Client product · Footwear retail · Freelance, live', title: 'Clarks.',
+    facts: [['Role', 'Freelance UI/UX designer, end to end'], ['Deliverables', 'IA, user flows, wireframes, interactive prototype, high-fidelity UI'], ['Users', 'Retail customers'], ['Status', 'Live client project']],
+    chapters: [
+      ['Context', 'What was happening?', `<p>A live digital product for Clarks, taken on independently alongside my full-time role. The brief came as business and user requirements; the job was to turn them into a complete, production-ready product experience.</p>`],
+      ['Complexity', 'Why was this hard?', `<p>Unlike enterprise software, the users here have no patience and endless alternatives. The difficulty wasn't a tangled workflow — it was <strong>consistency across the whole journey</strong> for a brand people already have expectations of, delivered by one designer with no in-house team.</p>`],
+      ['System', 'How did the product work?', `<p>I started with the information architecture and the end-to-end flow, then defined a visual and interaction language that every screen would follow: type scale, spacing, component behaviour and states. Screens were composed from that language rather than designed one by one.</p>`],
+      ['Decisions', 'What design decisions did I make?', `<ul><li>Structure first — flows and wireframes agreed with stakeholders before any visual work</li><li>One interaction language across the journey so nothing feels like a different product</li><li>Prototypes used for stakeholder review, so feedback was about behaviour, not pictures</li><li>Production-ready handoff: states, edge cases and responsive behaviour specified</li></ul>`],
+      ['Experience', 'How did the solution behave?', `<p>Iterated through several rounds of stakeholder feedback and usability considerations, with the prototype as the shared artefact. The final delivery was a coherent product from first screen to last.</p>`],
+      ['Outcome', 'What changed?', `<p>Delivered as a live client product with production-ready designs. Screens and details can be shared on request.</p>`]] },
+  chrm: { accent: 'var(--chrm)', kicker: 'Client product · HR services · Consolidated HRM Services Pvt. Ltd. · Freelance, live', title: 'CHRM.',
+    facts: [['Role', 'Freelance UI/UX designer, end to end'], ['Deliverables', 'IA, user journeys, wireframes, prototype, high-fidelity UI'], ['Users', 'Clients and HR service teams'], ['Status', 'Live client project']],
+    chapters: [
+      ['Context', 'What was happening?', `<p>Consolidated HRM Services is an organised-sector HR services company. They needed a digital product that reflected how their services actually run — and that could grow as the organisation added more of them.</p>`],
+      ['Complexity', 'Why was this hard?', `<p>Service businesses run on process, not product. The work was <strong>translating service workflows into structured user journeys</strong>: what a client asks for, what the service team does, and what both need to see while it happens.</p>`],
+      ['System', 'How did the product work?', `<p>I mapped the service ecosystem first, then built the IA and journeys around it. A consistent, professional interface system — aligned to the organisation's HR services — meant new services could be added as compositions of existing patterns.</p>`],
+      ['Decisions', 'What design decisions did I make?', `<ul><li>Journeys designed around service stages, so users always know where a request stands</li><li>An interface system built for scalability, not just the first release</li><li>Clarity over decoration: this is a product people use to get work done</li><li>Direct iteration with stakeholders through wireframes and prototypes</li></ul>`],
+      ['Experience', 'How did the solution behave?', `<p>Each service follows the same structural pattern, so learning one means understanding all of them. The system was designed to stay consistent as the catalogue grows.</p>`],
+      ['Outcome', 'What changed?', `<p>Delivered as a live client product with production-ready designs emphasising usability, clarity, scalability and consistency. Screens available on request.</p>`]] } };
+const caseEl = $('#case'), order = ['hrms', 'erp', 'clarks', 'chrm']; let current = null, lastFocus = null;
+function buildCase(key) {
+  const c = CASES[key]; caseEl.style.setProperty('--pa', c.accent);
+  $('#caseCrumb').innerHTML = `Case study <b>${(order.indexOf(key) + 1).toString().padStart(2, '0')} / 04</b>`; $('#caseKicker').textContent = c.kicker; $('#caseTitle').textContent = c.title;
+  $('#caseFacts').innerHTML = c.facts.map(f => `<div><b>${f[0]}</b>${f[1]}</div>`).join('');
+  $('#caseChapters').innerHTML = c.chapters.map((ch, i) => `<div class="ch"><div class="ch__head"><div class="n">0${i + 1}</div><h3>${ch[0]}</h3><p>${ch[1]}</p></div><div class="ch__body">${ch[2]}</div></div>`).join('');
+  const nx = order[(order.indexOf(key) + 1) % order.length]; $('#caseNext').firstChild.textContent = CASES[nx].title.replace(/\.$/, '') + ' '; $('#caseNext').dataset.next = nx;
+}
+function openCase(key, from) {
+  buildCase(key); current = key; lastFocus = document.activeElement; caseEl.classList.add('open'); caseEl.scrollTop = 0; document.body.style.overflow = 'hidden';
+  html.dataset.theme = 'light';
+  if (from && !reduced) { const r = from.getBoundingClientRect(); gsap.fromTo(caseEl, { clipPath: `inset(${r.top}px ${innerWidth - r.right}px ${innerHeight - r.bottom}px ${r.left}px round 12px)` }, { clipPath: 'inset(0px 0px 0px 0px round 0px)', duration: .9, ease: 'power4.inOut', clearProps: 'clipPath' }); gsap.fromTo('.case__hero, .case__chapters', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .8, delay: .5, stagger: .1, ease: 'power3.out' }); }
+  setTimeout(() => caseEl.focus(), 50);
+}
+function closeCase() {
+  const done = () => { caseEl.classList.remove('open'); document.body.style.overflow = ''; const s = sections.find(s => s.dataset.case === current); if (s) setTheme(s.dataset.theme); if (lastFocus) lastFocus.focus(); current = null; };
+  if (reduced) return done(); gsap.to(caseEl, { opacity: 0, duration: .35, ease: 'power2.in', onComplete: () => { done(); gsap.set(caseEl, { opacity: 1 }); } });
+}
+$$('[data-open]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); openCase(el.dataset.open, el.closest('.project').querySelector('.project__visual')); }));
+$('#caseClose').addEventListener('click', closeCase);
+$('#caseNext').addEventListener('click', () => { const nx = $('#caseNext').dataset.next; gsap.to(caseEl, { opacity: 0, duration: .3, onComplete: () => { buildCase(nx); current = nx; caseEl.scrollTop = 0; gsap.to(caseEl, { opacity: 1, duration: .4 }); } }); });
+
+/* ───────────── keyboard: easter eggs ───────────── */
+let buf = '';
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Escape') { if (current) closeCase(); html.classList.remove('inspect'); return; }
+  if (e.target.matches('input,textarea,[contenteditable]')) return;
+  const k = e.key.toLowerCase();
+  if (k === 'g' && !buf) html.classList.toggle('show-grid');
+  else if (k === 'd' && !buf) { manualTheme = manualTheme ? null : (html.dataset.theme === 'dark' ? 'light' : 'dark'); html.dataset.theme = manualTheme || sections.find(s => { const r = s.getBoundingClientRect(); return r.top < innerHeight * .55 && r.bottom > innerHeight * .55; })?.dataset.theme || 'dark'; }
+  else if (k === 'i' && !buf) { html.classList.toggle('inspect'); html.classList.toggle('show-grid', html.classList.contains('inspect')); }
+  if (k === '/') { buf = '/'; return; }
+  if (buf) { if (k.length === 1) buf += k; const cmds = { '/work': '#work', '/about': '#about', '/contact': '#contact', '/journey': '#journey', '/index': '#intro', '/system': '#system' }; const hit = Object.keys(cmds).find(c => c === buf); if (hit) { if (current) closeCase(); $(cmds[hit]).scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); buf = ''; } else if (!Object.keys(cmds).some(c => c.startsWith(buf))) buf = ''; }
+});
+
+/* ───────────── inspect annotations ───────────── */
+$$('.h-l, .h-xl, .project__title, .think__stmt, .about__stmt, .contact__stmt').forEach(el => { const t = document.createElement('span'); t.className = 'inspect-tag'; t.textContent = 'Display · Inter 300 · −4.5% tracking'; t.style.top = '-22px'; el.prepend(t); });
+$$('.lede').forEach(el => { const t = document.createElement('span'); t.className = 'inspect-tag'; t.textContent = 'Body · 56ch measure · 1.5 lh'; t.style.top = '-22px'; el.prepend(t); });
+
+/* smooth in-page nav offset + refresh after fonts */
+ScrollTrigger.refresh(); document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 300));
+})();
+</script>
+</body>
+</html>
